@@ -7,7 +7,7 @@ PyPI using **Trusted Publishing** (OIDC) — no API token is stored in the repo.
 
 1. Create the project on PyPI (or reserve the name `agent-repo-preflight`).
 2. In the project's **Publishing** settings, add a GitHub Actions trusted publisher:
-   - Owner: `scottcampbell` (your GitHub org/user)
+   - Owner: `scottcampbelldata` (your GitHub org/user)
    - Repository: `agent-repo-preflight`
    - Workflow name: `release.yml`
    - Environment: `pypi`

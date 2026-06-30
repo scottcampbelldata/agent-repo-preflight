@@ -7,7 +7,7 @@ terminates TLS.
 ## 1. Quick start (Docker Compose)
 
 ```bash
-git clone https://github.com/scottcampbell/agent-repo-preflight.git
+git clone https://github.com/scottcampbelldata/agent-repo-preflight.git
 cd agent-repo-preflight
 docker compose up -d --build
 ```
