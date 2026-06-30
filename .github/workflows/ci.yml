@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Least privilege: this project's own scanner flags `write-all`. Read-only is all CI needs.
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      # Actions are pinned to full commit SHAs (the scanner flags unpinned actions).
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,web]" ruff
+      - name: Lint
+        run: ruff check src tests
+      - name: Format check
+        run: ruff format --check src tests
+      - name: Test
+        run: python -m pytest -q
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Build wheel
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build --wheel
+      - name: Verify wheel ships rule data and templates
+        run: |
+          python - <<'PY'
+          import glob, zipfile, sys
+          names = zipfile.ZipFile(sorted(glob.glob("dist/*.whl"))[-1]).namelist()
+          rules = sum(1 for n in names if "rules_data/" in n and n.endswith(".yaml"))
+          tpl = sum(1 for n in names if "/templates/" in n and n.endswith(".html"))
+          assert rules >= 25, f"expected >=25 rule yamls in wheel, found {rules}"
+          assert tpl >= 5, f"expected web templates in wheel, found {tpl}"
+          print(f"OK: {rules} rules, {tpl} templates packaged")
+          PY
