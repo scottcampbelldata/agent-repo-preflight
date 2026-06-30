@@ -14,6 +14,16 @@
   <p class="hint">Public repos only. The scanner reads files — it never runs them.</p>
 </section>
 
+<div id="scan-overlay" class="scan-overlay" hidden>
+  <div class="scan-overlay-box">
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="scan-overlay-title">Scanning…</p>
+    <p class="scan-overlay-target"></p>
+    <p class="scan-overlay-note">Downloading the repo and checking install hooks, agent
+      instructions, CI, and auto-run config. This can take a few seconds.</p>
+  </div>
+</div>
+
 {% if recent %}
 <section class="recent">
   <h2>Recent scans</h2>

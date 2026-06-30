@@ -15,6 +15,7 @@
     </div>
   </div>
   <div class="trust-formats">
+    <button type="button" id="copy-link" class="copy-link">Copy link</button>
     <a href="/report/{{ id }}.json">JSON</a>
     <a href="/report/{{ id }}.md">Markdown</a>
   </div>
@@ -35,9 +36,18 @@
 <section class="panel">
   <h2>Findings <span class="count">{{ report.findings|length }}</span></h2>
   {% if report.findings %}
+  {% set severities = report.findings | map(attribute="severity") | list %}
+  <div class="finding-filters">
+    <button type="button" class="filter-btn active" data-filter="all">All</button>
+    {% for sev in ["critical", "high", "medium", "low", "info"] %}
+    {% if sev in severities %}
+    <button type="button" class="filter-btn" data-filter="{{ sev }}">{{ sev }} ({{ severities|select("equalto", sev)|list|length }})</button>
+    {% endif %}
+    {% endfor %}
+  </div>
   <ul class="findings">
     {% for f in report.findings %}
-    <li class="finding sev-{{ f.severity }}">
+    <li class="finding sev-{{ f.severity }}" data-severity="{{ f.severity }}">
       <div class="finding-head">
         <span class="sev-tag sev-tag-{{ f.severity }}">{{ f.severity|upper }}</span>
         <span class="finding-rule">{{ f.rule_id }}</span>

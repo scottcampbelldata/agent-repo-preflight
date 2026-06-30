@@ -40,6 +40,23 @@ def test_report_json_and_md(client):
     assert "AI-Agent Preflight" in client.get(f"/report/{rid}.md").text
 
 
+def test_home_has_scan_overlay(client):
+    assert 'id="scan-overlay"' in client.get("/").text
+
+
+def test_report_has_copy_link_and_filters(client):
+    rid = client.post(
+        "/scan", data={"target": "https://github.com/o/r"}, follow_redirects=False
+    ).headers["location"].split("/")[-1]
+    page = client.get(f"/report/{rid}").text
+    assert 'id="copy-link"' in page
+    assert "finding-filters" in page and 'data-severity="critical"' in page
+
+
+def test_static_app_js_served(client):
+    assert client.get("/static/app.js").status_code == 200
+
+
 def test_invalid_url_shows_error(client):
     r = client.post("/scan", data={"target": "https://gitlab.com/o/r"})
     assert r.status_code == 400 and "github" in r.text.lower()
