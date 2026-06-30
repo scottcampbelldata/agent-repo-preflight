@@ -45,9 +45,11 @@ def test_home_has_scan_overlay(client):
 
 
 def test_report_has_copy_link_and_filters(client):
-    rid = client.post(
-        "/scan", data={"target": "https://github.com/o/r"}, follow_redirects=False
-    ).headers["location"].split("/")[-1]
+    rid = (
+        client.post("/scan", data={"target": "https://github.com/o/r"}, follow_redirects=False)
+        .headers["location"]
+        .split("/")[-1]
+    )
     page = client.get(f"/report/{rid}").text
     assert 'id="copy-link"' in page
     assert "finding-filters" in page and 'data-severity="critical"' in page
