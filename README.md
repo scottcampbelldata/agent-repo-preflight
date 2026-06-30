@@ -1,5 +1,9 @@
 # agent-repo-preflight
 
+![Agent Preflight](https://img.shields.io/badge/agent--preflight-clean-brightgreen)
+![License: MIT](https://img.shields.io/badge/license-MIT-blue)
+![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
+
 **Paste a GitHub repo. Get a "safe for AI agent use?" report — before you let Claude Code, Codex, Cursor, Copilot Agent, or Windsurf clone, install, or run it.**
 
 A local-first scanner that audits a repository for hidden execution risks **before** an AI coding agent touches it. It never runs the target repo's code — it reads files, parses install hooks, agent-instruction files, MCP configs, and CI workflows, and reports a deterministic verdict.
@@ -101,6 +105,60 @@ paths), so it can't be coaxed into scanning the host filesystem. It still never 
 target repository code. Set `AGENT_PREFLIGHT_DB`, `AGENT_PREFLIGHT_HOST`, and
 `AGENT_PREFLIGHT_PORT` to configure storage and binding.
 
+## GitHub Action
+
+Run the scanner on every PR and get an automatic risk comment + check. Add a workflow:
+
+```yaml
+# .github/workflows/agent-preflight.yml
+name: Agent Preflight
+on: [pull_request]
+permissions:
+  contents: read
+  pull-requests: write        # only needed if you want the PR comment
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: scottcampbell/agent-repo-preflight@v1
+        with:
+          path: "."           # directory to scan (default ".")
+          fail-on: "FAIL"     # FAIL | REVIEW | none (default "FAIL")
+          comment: "true"     # post/update a sticky PR comment (default "true")
+```
+
+The Action posts a sticky PR comment with the report, sets the check status, and fails
+the build when the verdict meets `fail-on`. It requests only `contents: read` +
+`pull-requests: write` — never `write-all` — and pins its own dependencies to SHAs.
+Full reference: [docs/github-action.md](docs/github-action.md).
+
+## Badge
+
+Advertise that your repo is preflight-clean.
+
+**Static** (zero setup) — paste into your README:
+
+```markdown
+![Agent Preflight](https://img.shields.io/badge/agent--preflight-clean-brightgreen)
+```
+
+**Dynamic** (reflects real scan results) — the CLI and Action write a shields.io
+*endpoint* JSON:
+
+```bash
+agent-repo-preflight scan . --badge agent-preflight-badge.json
+```
+
+Publish that JSON (a CI artifact, a committed file, or a gist) and point a shields
+endpoint badge at its raw URL:
+
+```markdown
+![Agent Preflight](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/OWNER/REPO/BRANCH/agent-preflight-badge.json)
+```
+
+Colors: PASS → green, REVIEW → yellow, FAIL → red.
+
 ## What it covers
 
 | Category | Examples |
@@ -126,6 +184,7 @@ Rules are plain YAML in [`src/agent_repo_preflight/rules_data/`](src/agent_repo_
 - [Threat model](docs/threat-model.md) — what AI-agent repo onboarding risks look like, and what this covers / doesn't.
 - [Rule authoring](docs/rule-authoring.md) — write and test a new rule.
 - [AI-agent safety checklist](docs/ai-agent-safety-checklist.md) — a human checklist mirroring the rules.
+- [GitHub Action reference](docs/github-action.md) — inputs, outputs, gating, permissions.
 
 ## License
 
