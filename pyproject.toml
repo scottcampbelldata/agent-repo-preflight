@@ -21,11 +21,9 @@ web = ["fastapi>=0.110", "jinja2>=3.1", "uvicorn>=0.29", "python-multipart>=0.0.
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/agent_repo_preflight"]
-
-[tool.hatch.build.targets.wheel.force-include]
-"src/agent_repo_preflight/rules_data" = "agent_repo_preflight/rules_data"
-"src/agent_repo_preflight/web/templates" = "agent_repo_preflight/web/templates"
-"src/agent_repo_preflight/web/static" = "agent_repo_preflight/web/static"
+# Non-.py data files (rule YAMLs, web templates, static assets) live inside the
+# package directory and are included automatically by hatchling. No force-include
+# is needed — adding one double-packages the files and fails the build.
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
