@@ -1,0 +1,25 @@
+# Minimal VPS deployment for the agent-repo-preflight web demo.
+#   docker compose up -d --build
+# Then put a reverse proxy (Caddy/nginx) in front for TLS — see docs/deploy.md.
+services:
+  web:
+    build: .
+    image: agent-repo-preflight
+    restart: unless-stopped
+    # Bind to localhost on the host so only your reverse proxy can reach it.
+    # Use "8000:8000" instead if you want it directly reachable for testing.
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - preflight-data:/data
+    environment:
+      # Optional: a token lifts GitHub rate limits and enables private-repo scans.
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/').status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  preflight-data:
