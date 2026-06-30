@@ -37,7 +37,12 @@ def _remote_scan(target: str, *, scanned_at: str = "") -> ReportModel:
 
 
 def _find_examples_dir() -> str | None:
-    # Walk up from the package looking for a top-level `examples/` directory.
+    # Explicit override (used by the Docker image, where examples are bundled at a
+    # known path rather than sitting above the installed package).
+    env_dir = os.environ.get("AGENT_PREFLIGHT_EXAMPLES_DIR")
+    if env_dir and os.path.isdir(env_dir):
+        return env_dir
+    # Otherwise walk up from the package looking for a top-level `examples/` directory.
     d = _HERE
     for _ in range(6):
         d = os.path.dirname(d)
