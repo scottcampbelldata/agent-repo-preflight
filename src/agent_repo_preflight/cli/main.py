@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from datetime import UTC, datetime
 
+from ..report_renderer.badge import badge_endpoint
 from ..report_renderer.json_report import render_json
 from ..report_renderer.markdown_report import render_markdown
 from ..report_renderer.terminal_report import render_terminal
@@ -36,6 +38,11 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("target")
     s.add_argument("--json", action="store_true")
     s.add_argument("--markdown-report", action="store_true")
+    s.add_argument(
+        "--badge",
+        metavar="FILE",
+        help="Write a shields.io endpoint-badge JSON for the verdict to FILE.",
+    )
     sub.add_parser("rules", help="List loaded rules")
     return p
 
@@ -55,6 +62,9 @@ def main(argv=None) -> int:
     except Exception as exc:  # network/IO failures
         print(f"error: scan failed: {exc}", file=sys.stderr)
         return 3
+    if args.badge:
+        with open(args.badge, "w", encoding="utf-8") as fh:
+            json.dump(badge_endpoint(report.verdict), fh)
     if args.json:
         print(render_json(report))
     elif args.markdown_report:
