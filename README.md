@@ -1,5 +1,6 @@
 # agent-repo-preflight
 
+[![CI](https://github.com/scottcampbelldata/agent-repo-preflight/actions/workflows/ci.yml/badge.svg)](https://github.com/scottcampbelldata/agent-repo-preflight/actions/workflows/ci.yml)
 ![Agent Preflight](https://img.shields.io/badge/agent--preflight-clean-brightgreen)
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
