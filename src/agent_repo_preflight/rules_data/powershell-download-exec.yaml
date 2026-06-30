@@ -1,16 +1,15 @@
 id: powershell-download-exec
-name: PowerShell downloads or launches external content
-severity: medium
+name: PowerShell downloads a file during setup
+severity: low
 category: dangerous-commands
 blast_radius:
 - network
-- shell
 match:
   facts:
-  - content.invoke_webrequest
-  - content.start_process
-explanation: '`Invoke-WebRequest`/`Invoke-RestMethod`/`Start-Process` can fetch and launch external executables
-  during setup.'
-remediation: Verify the URLs and binaries involved. Avoid running on an untrusted machine.
+  - content.ps_download_file
+explanation: A PowerShell script downloads a file from the network during setup (e.g. an
+  installer). Often legitimate, but worth confirming the source URL and what is done with the
+  downloaded file.
+remediation: Verify the download URL and that the fetched file is checksum-verified before use.
 references:
-- https://attack.mitre.org/techniques/T1059/001/
+- https://attack.mitre.org/techniques/T1105/

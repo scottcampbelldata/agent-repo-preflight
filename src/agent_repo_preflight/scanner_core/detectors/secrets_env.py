@@ -7,8 +7,16 @@ from ..facts import Fact
 from ..filetree import FileTree
 from .base import register
 
+# Only genuinely high-blast-radius credentials: cloud root/secret keys, VCS/registry
+# publish tokens, and private keys. Deliberately NOT bare *_API_KEY or *PASSWORD, which
+# match ordinary app config (DB passwords, narrow third-party API keys) and cry wolf.
 _BROAD = re.compile(
-    r"(_TOKEN|_SECRET|_KEY|PASSWORD|AWS_|GITHUB_TOKEN|OPENAI_API_KEY|PRIVATE_KEY)", re.I
+    r"AWS_SECRET_ACCESS_KEY|AWS_ACCESS_KEY_ID|AWS_SESSION_TOKEN"
+    r"|AZURE_CLIENT_SECRET|GOOGLE_APPLICATION_CREDENTIALS|GCP_SA_KEY|GCP_SERVICE_ACCOUNT"
+    r"|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|NPM_TOKEN|PYPI_TOKEN|CARGO_TOKEN"
+    r"|DIGITALOCEAN_TOKEN|HEROKU_API_KEY|CLOUDFLARE_API_TOKEN|SSH_PRIVATE_KEY"
+    r"|PRIVATE_KEY|_SECRET_KEY$|CLIENT_SECRET",
+    re.I,
 )
 
 

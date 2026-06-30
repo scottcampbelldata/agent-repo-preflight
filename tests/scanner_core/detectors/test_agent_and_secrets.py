@@ -31,9 +31,20 @@ def test_detects_cursor_and_copilot_and_windsurf():
     assert {"cursor-rules", "copilot-instructions", "windsurf"} <= surfaces
 
 
-def test_broad_env_request():
+def test_broad_env_request_flags_dangerous_creds():
     facts = SecretsEnvDetector().detect(
-        _tree((".env.example", "GITHUB_TOKEN=\nAWS_SECRET_ACCESS_KEY=\nPORT=3000"))
+        _tree(
+            (".env.example", "GITHUB_TOKEN=\nAWS_SECRET_ACCESS_KEY=\nSSH_PRIVATE_KEY=\nPORT=3000")
+        )
     )
     keys = {f.data["key"] for f in facts if f.type == "secret.broad_env_request"}
-    assert "GITHUB_TOKEN" in keys and "AWS_SECRET_ACCESS_KEY" in keys and "PORT" not in keys
+    assert "GITHUB_TOKEN" in keys and "AWS_SECRET_ACCESS_KEY" in keys
+    assert "SSH_PRIVATE_KEY" in keys and "PORT" not in keys
+
+
+def test_broad_env_request_ignores_ordinary_app_config():
+    # DB passwords and narrow third-party API keys are normal config, not broad creds.
+    facts = SecretsEnvDetector().detect(
+        _tree((".env.example", "PGPASSWORD=\nEIA_API_KEY=\nENTSOE_API_KEY=\nREDIS_PASSWORD="))
+    )
+    assert facts == []

