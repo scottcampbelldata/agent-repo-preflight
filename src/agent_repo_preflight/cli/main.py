@@ -11,6 +11,19 @@ from ..report_renderer.terminal_report import render_terminal
 _EXIT = {"PASS": 0, "REVIEW": 1, "FAIL": 2}
 
 
+def _ensure_utf8_stdout() -> None:
+    # rich emits box-drawing/unicode glyphs; a redirected stdout under a non-UTF-8
+    # locale (e.g. cp1252 on Windows) otherwise raises UnicodeEncodeError. Force a
+    # UTF-8 stream with replacement so output is robust when piped or redirected.
+    for stream in (sys.stdout, sys.stderr):
+        enc = (getattr(stream, "encoding", "") or "").lower()
+        if enc not in ("utf-8", "utf8"):
+            try:
+                stream.reconfigure(encoding="utf-8", errors="replace")
+            except (AttributeError, ValueError):
+                pass
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="agent-repo-preflight",
@@ -26,6 +39,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv=None) -> int:
+    _ensure_utf8_stdout()
     args = build_parser().parse_args(argv)
     if args.command == "rules":
         for r in load_rules():
