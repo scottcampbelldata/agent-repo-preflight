@@ -129,12 +129,5 @@ Rules are plain YAML in [`src/agent_repo_preflight/rules_data/`](src/agent_repo_
 
 ## License
 
-Source-available under the [PolyForm Noncommercial License 1.0.0](LICENSE).
-
-- **Free for any noncommercial use** — personal, research, education, hobby, and
-  nonprofit/government use — provided you keep the copyright/attribution notice intact.
-- **Commercial use requires a separate license.** To use this software for a commercial
-  purpose, get written permission first: Scott Campbell <scott@scottcampbell.io>.
-
-Note: this is *source-available*, not OSI "open source" — commercial users must obtain a
-license. Contributions are accepted under the same terms.
+[MIT](LICENSE) — free to use, modify, and distribute, including commercially.
+Attribution appreciated but not required beyond keeping the license notice.
