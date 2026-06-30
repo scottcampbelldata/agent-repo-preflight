@@ -1,0 +1,25 @@
+name: Agent Preflight
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Least privilege: read the repo, and write PR comments. Never write-all.
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - name: Agent Repo Preflight
+        uses: ./
+        with:
+          path: "."
+          # This repo intentionally ships malicious example fixtures under examples/,
+          # so a FAIL is expected here — comment only, do not fail the build.
+          fail-on: "none"

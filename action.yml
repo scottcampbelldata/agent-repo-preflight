@@ -1,0 +1,95 @@
+name: "Agent Repo Preflight"
+description: "Audit a repository for AI-agent execution risks before agents clone, install, or run it."
+branding:
+  icon: "shield"
+  color: "purple"
+
+inputs:
+  path:
+    description: "Directory to scan."
+    required: false
+    default: "."
+  fail-on:
+    description: "Verdict that fails the check: FAIL, REVIEW, or none."
+    required: false
+    default: "FAIL"
+  comment:
+    description: "Post/update a sticky PR comment with the report (needs pull-requests: write)."
+    required: false
+    default: "true"
+  github-token:
+    description: "Token used to post the PR comment."
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  verdict:
+    description: "PASS | REVIEW | FAIL"
+    value: ${{ steps.scan.outputs.verdict }}
+  score:
+    description: "Numeric risk score."
+    value: ${{ steps.scan.outputs.score }}
+  report-json:
+    description: "Path to the JSON report."
+    value: ${{ steps.scan.outputs.report-json }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+      with:
+        python-version: "3.12"
+
+    - name: Install agent-repo-preflight
+      shell: bash
+      run: pip install "$GITHUB_ACTION_PATH"
+
+    - name: Scan
+      id: scan
+      shell: bash
+      run: |
+        set -euo pipefail
+        report="preflight-report.json"
+        # The scanner never executes target code. Exit code 0/1/2 maps to PASS/REVIEW/FAIL;
+        # capture it without failing this step so we can gate explicitly below.
+        agent-repo-preflight scan "${{ inputs.path }}" --json --badge preflight-badge.json > "$report" || true
+        # Markdown for the PR comment: the CLI writes UTF-8-safe output (the report
+        # contains emoji). A second scan of the checked-out repo is cheap and local.
+        agent-repo-preflight scan "${{ inputs.path }}" --markdown-report > preflight-report.md || true
+        verdict="$(python -c "import json;print(json.load(open('$report'))['verdict'])")"
+        score="$(python -c "import json;print(json.load(open('$report'))['score'])")"
+        echo "verdict=$verdict" >> "$GITHUB_OUTPUT"
+        echo "score=$score" >> "$GITHUB_OUTPUT"
+        echo "report-json=$report" >> "$GITHUB_OUTPUT"
+        echo "Agent Repo Preflight verdict: $verdict (score $score)"
+
+    - name: Comment on PR
+      if: ${{ inputs.comment == 'true' && github.event_name == 'pull_request' }}
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PR: ${{ github.event.pull_request.number }}
+      run: |
+        printf '<!-- agent-repo-preflight -->\n\n' > comment.md
+        cat preflight-report.md >> comment.md
+        # Sticky: edit our previous comment if present, otherwise create a new one.
+        gh pr comment "$PR" --body-file comment.md --edit-last \
+          || gh pr comment "$PR" --body-file comment.md
+
+    - name: Gate
+      shell: bash
+      env:
+        VERDICT: ${{ steps.scan.outputs.verdict }}
+        FAIL_ON: ${{ inputs.fail-on }}
+      run: |
+        case "$FAIL_ON" in
+          none)
+            exit 0 ;;
+          REVIEW)
+            if [ "$VERDICT" = "PASS" ]; then exit 0; else
+              echo "::error::Preflight verdict $VERDICT meets fail-on=REVIEW"; exit 1; fi ;;
+          *)  # FAIL (default)
+            if [ "$VERDICT" = "FAIL" ]; then
+              echo "::error::Preflight verdict FAIL"; exit 1; else exit 0; fi ;;
+        esac
