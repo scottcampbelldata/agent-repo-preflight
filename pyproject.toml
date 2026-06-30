@@ -10,7 +10,38 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 license-files = ["LICENSE"]
+authors = [{ name = "Scott Campbell", email = "scott@scottcampbell.io" }]
+keywords = [
+    "security",
+    "ai-agents",
+    "supply-chain-security",
+    "static-analysis",
+    "claude-code",
+    "cursor",
+    "mcp",
+    "developer-tools",
+    "llm-security",
+    "github-actions",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Quality Assurance",
+]
 dependencies = ["rich>=13.0", "PyYAML>=6.0", "requests>=2.31"]
+
+[project.urls]
+Homepage = "https://github.com/scottcampbell/agent-repo-preflight"
+Repository = "https://github.com/scottcampbell/agent-repo-preflight"
+Issues = "https://github.com/scottcampbell/agent-repo-preflight/issues"
+Changelog = "https://github.com/scottcampbell/agent-repo-preflight/blob/main/CHANGELOG.md"
 
 [project.scripts]
 agent-repo-preflight = "agent_repo_preflight.cli.main:main"
