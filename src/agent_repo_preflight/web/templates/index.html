@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>Is this repo safe for an AI coding agent?</h1>
+  <p class="lede">
+    Paste a public GitHub URL. Get a preflight risk report — before you let
+    Claude Code, Codex, Cursor, Copilot Agent, or Windsurf clone, install, or run it.
+  </p>
+  <form class="scan-form" method="post" action="/scan">
+    <input type="text" name="target" placeholder="https://github.com/owner/repo"
+           autocomplete="off" autofocus required>
+    <button type="submit">Scan</button>
+  </form>
+  <p class="hint">Public repos only. The scanner reads files — it never runs them.</p>
+</section>
+
+{% if recent %}
+<section class="recent">
+  <h2>Recent scans</h2>
+  <ul class="recent-list">
+    {% for r in recent %}
+    <li>
+      <a href="/report/{{ r.id }}">
+        <span class="verdict-pill verdict-{{ r.verdict|lower }}">{{ r.verdict }}</span>
+        <span class="recent-name">{{ r.name or r.source }}</span>
+        <span class="recent-score">score {{ r.score }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}
