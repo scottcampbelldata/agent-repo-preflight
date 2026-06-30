@@ -10,8 +10,16 @@ from .base import register
 PATTERNS: dict[str, re.Pattern] = {
     "curl_pipe_sh": re.compile(r"curl\b[^\n|]*\|\s*(ba)?sh", re.I),
     "wget_pipe_sh": re.compile(r"wget\b[^\n|]*\|\s*(ba)?sh", re.I),
-    "invoke_webrequest": re.compile(r"Invoke-WebRequest|Invoke-RestMethod", re.I),
-    "start_process": re.compile(r"Start-Process", re.I),
+    # Actual file download during setup (requires -OutFile / DownloadFile), not a
+    # bare API call or health check.
+    "ps_download_file": re.compile(
+        r"(Invoke-WebRequest|Invoke-RestMethod|\biwr\b|\birm\b)[^\n]*-OutFile|\.DownloadFile\(",
+        re.I,
+    ),
+    # The real fileless download-and-execute technique.
+    "ps_iex_download": re.compile(
+        r"(IEX|Invoke-Expression)\s*[\(\"']|\.DownloadString\s*\(|\|\s*iex\b", re.I
+    ),
     "netcat": re.compile(r"\bnc\b\s+-[a-z]*e|\bncat\b", re.I),
     "socat": re.compile(r"\bsocat\b", re.I),
     "chmod_x": re.compile(r"chmod\s+\+x|chmod\s+[0-7]*7[0-7]*"),

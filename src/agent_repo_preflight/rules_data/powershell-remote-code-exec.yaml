@@ -1,0 +1,17 @@
+id: powershell-remote-code-exec
+name: PowerShell downloads and executes remote code (IEX)
+severity: high
+category: dangerous-commands
+blast_radius:
+- network
+- shell
+match:
+  facts:
+  - content.ps_iex_download
+explanation: A PowerShell script downloads content and executes it in memory (`IEX
+  (...DownloadString...)` or `iwr ... | iex`). This is the standard fileless download-and-run
+  technique and runs remote code with no review.
+remediation: Never pipe downloaded content into Invoke-Expression. Download to a file, inspect
+  it, and only then run it.
+references:
+- https://attack.mitre.org/techniques/T1059/001/
