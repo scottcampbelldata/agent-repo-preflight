@@ -1,5 +1,5 @@
-from agent_repo_preflight.scanner_core.refine import downgrade_documentation_findings
 from agent_repo_preflight.scanner_core.findings import Finding
+from agent_repo_preflight.scanner_core.refine import downgrade_documentation_findings
 
 
 def _f(file, severity="high", category="dangerous-commands"):
@@ -19,9 +19,7 @@ def test_non_doc_file_is_unchanged():
 
 def test_agent_instruction_in_markdown_is_not_downgraded():
     # CLAUDE.md is markdown, but agents genuinely act on it — keep its severity.
-    out = downgrade_documentation_findings(
-        [_f("CLAUDE.md", "high", category="agent-instructions")]
-    )
+    out = downgrade_documentation_findings([_f("CLAUDE.md", "high", category="agent-instructions")])
     assert out[0].severity == "high"
 
 

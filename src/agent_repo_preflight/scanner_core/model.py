@@ -1,7 +1,9 @@
 from __future__ import annotations
-from dataclasses import dataclass, asdict
-from .findings import Finding
+
+from dataclasses import asdict, dataclass
+
 from .chains import Chain, ChainStep
+from .findings import Finding
 
 DISCLAIMER = (
     "This tool detects repo-level risk indicators before AI agents execute "
@@ -32,20 +34,15 @@ class ReportModel:
             "findings": [asdict(f) for f in self.findings],
             "blast_radius": self.blast_radius,
             "agent_instructions": self.agent_instructions,
-            "chains": [
-                {"steps": [asdict(s) for s in c.steps]} for c in self.chains
-            ],
+            "chains": [{"steps": [asdict(s) for s in c.steps]} for c in self.chains],
             "stats": self.stats,
             "disclaimer": self.disclaimer,
         }
 
     @classmethod
-    def from_dict(cls, d: dict) -> "ReportModel":
+    def from_dict(cls, d: dict) -> ReportModel:
         findings = [Finding(**f) for f in d.get("findings", [])]
-        chains = [
-            Chain([ChainStep(**s) for s in c.get("steps", [])])
-            for c in d.get("chains", [])
-        ]
+        chains = [Chain([ChainStep(**s) for s in c.get("steps", [])]) for c in d.get("chains", [])]
         return cls(
             repo=d.get("repo", {}),
             verdict=d.get("verdict", "PASS"),

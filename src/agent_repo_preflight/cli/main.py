@@ -1,12 +1,14 @@
 from __future__ import annotations
+
 import argparse
 import sys
-from datetime import datetime, timezone
-from ..scanner_core.scan import scan
-from ..scanner_core.rules import load_rules
+from datetime import UTC, datetime
+
 from ..report_renderer.json_report import render_json
 from ..report_renderer.markdown_report import render_markdown
 from ..report_renderer.terminal_report import render_terminal
+from ..scanner_core.rules import load_rules
+from ..scanner_core.scan import scan
 
 _EXIT = {"PASS": 0, "REVIEW": 1, "FAIL": 2}
 
@@ -46,7 +48,7 @@ def main(argv=None) -> int:
             print(f"{r.severity:8} {r.id:34} {r.name}")
         return 0
     try:
-        report = scan(args.target, scanned_at=datetime.now(timezone.utc).isoformat())
+        report = scan(args.target, scanned_at=datetime.now(UTC).isoformat())
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 3

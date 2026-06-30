@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 import re
+
 from .findings import Finding
 
 # Documentation/non-executable file types. Content here is read by humans, not

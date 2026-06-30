@@ -1,7 +1,7 @@
-from agent_repo_preflight.scanner_core.filetree import FileTree, FileEntry
 from agent_repo_preflight.scanner_core.detectors.github_actions import (
     GitHubActionsDetector,
 )
+from agent_repo_preflight.scanner_core.filetree import FileEntry, FileTree
 
 
 def _wf(content):

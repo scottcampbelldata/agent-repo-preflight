@@ -1,7 +1,7 @@
 from agent_repo_preflight.scanner_core.engine import evaluate
-from agent_repo_preflight.scanner_core.rules import Rule
 from agent_repo_preflight.scanner_core.facts import Fact
-from agent_repo_preflight.scanner_core.filetree import FileTree, FileEntry
+from agent_repo_preflight.scanner_core.filetree import FileEntry, FileTree
+from agent_repo_preflight.scanner_core.rules import Rule
 
 
 def test_fact_rule_with_pattern_matches():
@@ -38,9 +38,7 @@ def test_fact_rule_pattern_no_match():
         remediation="rem",
         match={"facts": ["pkg.lifecycle_script"], "patterns": ["curl"]},
     )
-    facts = [
-        Fact("pkg.lifecycle_script", "package.json", 3, {"command": "tsc"}, evidence="tsc")
-    ]
+    facts = [Fact("pkg.lifecycle_script", "package.json", 3, {"command": "tsc"}, evidence="tsc")]
     assert evaluate([rule], facts, FileTree("r", [])) == []
 
 

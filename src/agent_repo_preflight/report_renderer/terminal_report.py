@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -40,7 +41,5 @@ def render_terminal(report, *, console: Console | None = None) -> None:
     if r.chains:
         console.print("[bold]Suspicious setup chains (heuristic):[/]")
         for c in r.chains:
-            console.print(
-                "  " + " -> ".join(f"{s.kind}({s.file}:{s.line})" for s in c.steps)
-            )
+            console.print("  " + " -> ".join(f"{s.kind}({s.file}:{s.line})" for s in c.steps))
     console.print(f"[dim]{r.disclaimer}[/]")

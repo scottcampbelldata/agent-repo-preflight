@@ -1,10 +1,12 @@
 from __future__ import annotations
+
 import re
 from fnmatch import fnmatch
-from .rules import Rule
+
 from .facts import Fact
-from .findings import Finding
 from .filetree import FileTree
+from .findings import Finding
+from .rules import Rule
 
 
 def _patterns_match(patterns: list[str], haystacks: list[str]) -> bool:
@@ -57,8 +59,7 @@ def evaluate(rules: list[Rule], facts: list[Fact], tree: FileTree) -> list[Findi
         elif patterns:
             for e in tree.text_files():
                 if file_patterns and not any(
-                    fnmatch(e.path, g) or fnmatch(e.path.split("/")[-1], g)
-                    for g in file_patterns
+                    fnmatch(e.path, g) or fnmatch(e.path.split("/")[-1], g) for g in file_patterns
                 ):
                     continue
                 for i, line in enumerate(e.text.splitlines(), 1):

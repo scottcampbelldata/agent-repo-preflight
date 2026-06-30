@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import re
 from fnmatch import fnmatch
+
 from ..facts import Fact
 from ..filetree import FileTree
 from .base import register
@@ -15,9 +17,7 @@ _SURFACES = [
 ]
 _MCP_NAMES = ("*.mcp.json", "mcp.json", ".mcp.json", "*mcp*.json")
 _POWER_TOOLS = ("shell", "filesystem", "exec", "terminal", "bash", "subprocess")
-_UNVERIFIED = re.compile(
-    r"run\b.{0,40}\bwithout\b.{0,30}(review|inspect|check|read)", re.I
-)
+_UNVERIFIED = re.compile(r"run\b.{0,40}\bwithout\b.{0,30}(review|inspect|check|read)", re.I)
 
 
 def _surface_for(path: str) -> str | None:

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from ..scanner_core.model import ReportModel
 
 _VERDICT_LINE = {
@@ -30,9 +31,7 @@ def render_markdown(report: ReportModel) -> str:
         lines += ["| Severity | Rule | File:Line | Evidence |", "|---|---|---|---|"]
         for f in r.findings:
             ev = f.evidence.replace("|", "\\|")[:80]
-            lines.append(
-                f"| {f.severity.upper()} | {f.rule_id} | `{f.file}:{f.line}` | `{ev}` |"
-            )
+            lines.append(f"| {f.severity.upper()} | {f.rule_id} | `{f.file}:{f.line}` | `{ev}` |")
     else:
         lines.append("_No findings._")
     if r.agent_instructions:
@@ -42,8 +41,6 @@ def render_markdown(report: ReportModel) -> str:
     if r.chains:
         lines += ["", "## Suspicious setup chains (heuristic)", ""]
         for c in r.chains:
-            lines.append(
-                " → ".join(f"{s.kind} (`{s.file}:{s.line}`)" for s in c.steps)
-            )
+            lines.append(" → ".join(f"{s.kind} (`{s.file}:{s.line}`)" for s in c.steps))
     lines += ["", "---", f"_{r.disclaimer}_"]
     return "\n".join(lines)

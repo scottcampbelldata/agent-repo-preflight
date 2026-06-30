@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from dataclasses import dataclass, field
 from fnmatch import fnmatch
 
@@ -24,9 +25,7 @@ class FileTree:
 
     def match(self, glob: str) -> list[FileEntry]:
         return [
-            e
-            for e in self.entries
-            if fnmatch(e.path, glob) or fnmatch(e.path.split("/")[-1], glob)
+            e for e in self.entries if fnmatch(e.path, glob) or fnmatch(e.path.split("/")[-1], glob)
         ]
 
     def text_files(self) -> list[FileEntry]:

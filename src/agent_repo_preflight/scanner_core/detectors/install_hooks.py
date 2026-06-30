@@ -1,7 +1,9 @@
 from __future__ import annotations
+
 import json
 import re
 import tomllib
+
 from ..facts import Fact
 from ..filetree import FileTree
 from .base import register
@@ -15,9 +17,7 @@ LIFECYCLE = {
     "prepublish",
     "prepublishOnly",
 }
-_NET_EXEC = re.compile(
-    r"os\.system|subprocess|urllib|requests\.|socket\.|curl|wget|exec\(|eval\("
-)
+_NET_EXEC = re.compile(r"os\.system|subprocess|urllib|requests\.|socket\.|curl|wget|exec\(|eval\(")
 _KNOWN_BACKENDS = (
     "hatchling.build",
     "setuptools.build_meta",
@@ -65,9 +65,7 @@ class PythonInstallDetector:
                 continue
             for i, line in enumerate(e.text.splitlines(), 1):
                 if _NET_EXEC.search(line):
-                    facts.append(
-                        Fact("py.setup_network", e.path, i, {}, evidence=line.strip())
-                    )
+                    facts.append(Fact("py.setup_network", e.path, i, {}, evidence=line.strip()))
         for e in tree.match("pyproject.toml"):
             if not e.text:
                 continue

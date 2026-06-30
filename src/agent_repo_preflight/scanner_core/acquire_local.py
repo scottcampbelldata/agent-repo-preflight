@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 import os
+
 from .filetree import FileEntry, FileTree
 
 _SKIP_DIRS = {".git", "node_modules", ".venv", "venv", "__pycache__", "dist", "build"}
@@ -17,9 +19,7 @@ def _decode(data: bytes) -> tuple[str | None, bool]:
             return None, True
 
 
-def load_local(
-    path: str, *, max_files: int = 5000, max_file_bytes: int = 1_000_000
-) -> FileTree:
+def load_local(path: str, *, max_files: int = 5000, max_file_bytes: int = 1_000_000) -> FileTree:
     root = os.path.abspath(path)
     root_name = os.path.basename(root.rstrip(os.sep)) or root
     entries: list[FileEntry] = []

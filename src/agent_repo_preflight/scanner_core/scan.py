@@ -1,22 +1,24 @@
 from __future__ import annotations
+
 import os
-from .filetree import FileTree
+
 from .acquire_local import load_local
 from .acquire_remote import load_remote, parse_github_url
+from .chains import build_chains
 from .detectors import (  # noqa: F401  (import for register() side effects)
-    install_hooks,
-    content_patterns,
     agent_instructions,
-    secrets_env,
+    content_patterns,
     github_actions,
+    install_hooks,
+    secrets_env,
 )
 from .detectors.base import run_detectors
-from .rules import load_rules
 from .engine import evaluate
-from .refine import downgrade_documentation_findings
-from .chains import build_chains
-from .score import score, verdict, blast_radius_rollup, SEVERITY_WEIGHT
+from .filetree import FileTree
 from .model import ReportModel
+from .refine import downgrade_documentation_findings
+from .rules import load_rules
+from .score import SEVERITY_WEIGHT, blast_radius_rollup, score, verdict
 
 
 def scan_tree(
@@ -51,8 +53,6 @@ def scan_tree(
 
 def scan(target: str, *, scanned_at: str = "") -> ReportModel:
     if os.path.exists(target):
-        return scan_tree(
-            load_local(target), source=f"local:{target}", scanned_at=scanned_at
-        )
+        return scan_tree(load_local(target), source=f"local:{target}", scanned_at=scanned_at)
     owner, repo, ref = parse_github_url(target)  # raises ValueError if not a GitHub URL
     return scan_tree(load_remote(target), source=target, ref=ref, scanned_at=scanned_at)

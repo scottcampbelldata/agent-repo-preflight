@@ -1,5 +1,7 @@
 import os
+
 import pytest
+
 from agent_repo_preflight.scanner_core.acquire_local import load_local
 from agent_repo_preflight.scanner_core.scan import scan_tree
 

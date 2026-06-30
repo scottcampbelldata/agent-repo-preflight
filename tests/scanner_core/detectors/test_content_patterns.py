@@ -1,8 +1,8 @@
-from agent_repo_preflight.scanner_core.filetree import FileTree, FileEntry
 from agent_repo_preflight.scanner_core.detectors.content_patterns import (
     ContentPatternDetector,
     ShellScriptDetector,
 )
+from agent_repo_preflight.scanner_core.filetree import FileEntry, FileTree
 
 
 def _tree(path, content):
@@ -29,9 +29,7 @@ def test_detects_dev_tcp_and_base64_and_creds():
 
 
 def test_detects_encoded_powershell():
-    ids = _ids(
-        ContentPatternDetector().detect(_tree("a.ps1", "powershell -enc ZQBjAGgAbwA=\n"))
-    )
+    ids = _ids(ContentPatternDetector().detect(_tree("a.ps1", "powershell -enc ZQBjAGgAbwA=\n")))
     assert "encoded_powershell" in ids
 
 
@@ -54,16 +52,11 @@ def test_etc_passwd_is_not_a_credential_signal():
 
 def test_strong_credential_paths_still_match():
     ids = _ids(
-        ContentPatternDetector().detect(
-            _tree("a.sh", "cat ~/.ssh/id_rsa\ncat /etc/shadow\n")
-        )
+        ContentPatternDetector().detect(_tree("a.sh", "cat ~/.ssh/id_rsa\ncat /etc/shadow\n"))
     )
     assert "cred_path_read" in ids
 
 
 def test_shell_script_presence():
     facts = ShellScriptDetector().detect(_tree("install.sh", "echo hi\n"))
-    assert any(
-        f.type == "shell.script_present" and f.data["kind"] == "install.sh"
-        for f in facts
-    )
+    assert any(f.type == "shell.script_present" and f.data["kind"] == "install.sh" for f in facts)
