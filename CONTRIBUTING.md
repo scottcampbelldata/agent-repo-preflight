@@ -48,3 +48,10 @@ ruff check src tests && ruff format --check src tests && python -m pytest -q
 ```
 
 All three must pass — CI runs the same gates.
+
+## Licensing of contributions
+
+This project is source-available under the
+[PolyForm Noncommercial License 1.0.0](LICENSE): free for noncommercial use,
+commercial use requires a separate license from the author. By submitting a
+contribution, you agree it is licensed under the same terms.
