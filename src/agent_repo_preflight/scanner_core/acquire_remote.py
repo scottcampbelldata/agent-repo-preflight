@@ -1,12 +1,32 @@
 from __future__ import annotations
 
-import gzip
 import io
 import tarfile
+import zlib
 from urllib.parse import urlparse
 
 from .acquire_local import _decode
 from .filetree import FileEntry, FileTree
+
+
+def _gunzip_capped(data: bytes, max_out: int) -> bytes:
+    """Decompress gzip data, aborting if the output exceeds max_out bytes.
+
+    Guards against decompression ("zip") bombs: a tiny gzip can otherwise expand to
+    many gigabytes and exhaust memory. Streams the output and caps it absolutely.
+    """
+    d = zlib.decompressobj(16 + zlib.MAX_WBITS)  # 16 => gzip header
+    out = bytearray()
+    buf = data
+    while buf:
+        out += d.decompress(buf, 1 << 20)  # at most 1 MiB produced per call
+        if len(out) > max_out:
+            raise ValueError("Decompressed tarball exceeds cap (possible zip bomb)")
+        buf = d.unconsumed_tail
+    out += d.flush()
+    if len(out) > max_out:
+        raise ValueError("Decompressed tarball exceeds cap (possible zip bomb)")
+    return bytes(out)
 
 
 def parse_github_url(url: str) -> tuple[str, str, str | None]:
@@ -33,8 +53,9 @@ def load_tarball_bytes(
     *,
     max_files: int = 5000,
     max_file_bytes: int = 1_000_000,
+    max_decompressed: int = 500_000_000,
 ) -> FileTree:
-    raw = gzip.decompress(data)
+    raw = _gunzip_capped(data, max_decompressed)
     entries: list[FileEntry] = []
     with tarfile.open(fileobj=io.BytesIO(raw), mode="r:") as tar:
         for member in tar.getmembers():

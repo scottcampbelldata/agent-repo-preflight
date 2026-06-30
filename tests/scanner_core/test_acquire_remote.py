@@ -50,3 +50,22 @@ def test_load_remote_uses_injected_fetch():
     data = _make_tarball()
     tree = load_remote("https://github.com/org/repo", fetch=lambda url: data)
     assert tree.get("src/x.py").text == "print(1)"
+
+
+def test_decompression_bomb_is_rejected():
+    # A tiny gzip that expands far past the cap must raise, not OOM the host.
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w:gz") as tar:
+        payload = b"\x00" * 5_000_000  # compresses to a few KB
+        info = tarfile.TarInfo("repo/big.bin")
+        info.size = len(payload)
+        tar.addfile(info, io.BytesIO(payload))
+    data = buf.getvalue()
+    assert len(data) < 100_000  # the bomb is small on disk
+    with pytest.raises(ValueError):
+        load_tarball_bytes(data, "repo", max_decompressed=1_000_000)
+
+
+def test_normal_tarball_under_cap_still_works():
+    tree = load_tarball_bytes(_make_tarball(), "repo", max_decompressed=10_000_000)
+    assert tree.get("README.md").text == "hi"
