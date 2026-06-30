@@ -13,6 +13,7 @@ from .detectors import (  # noqa: F401  (import for register() side effects)
 from .detectors.base import run_detectors
 from .rules import load_rules
 from .engine import evaluate
+from .refine import downgrade_documentation_findings
 from .chains import build_chains
 from .score import score, verdict, blast_radius_rollup, SEVERITY_WEIGHT
 from .model import ReportModel
@@ -24,6 +25,7 @@ def scan_tree(
     facts = run_detectors(tree)
     rules = load_rules()
     findings = evaluate(rules, facts, tree)
+    findings = downgrade_documentation_findings(findings)
     findings.sort(key=lambda f: (-SEVERITY_WEIGHT[f.severity], f.file, f.line))
     chains = build_chains(facts, tree)
     instr = [
