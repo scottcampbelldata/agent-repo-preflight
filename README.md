@@ -61,13 +61,17 @@ Suspicious setup chains (heuristic):
 Requires Python 3.11+.
 
 ```bash
-# Run without installing (recommended):
+# Run without installing (recommended, once published to PyPI):
 uvx agent-repo-preflight scan <path-or-github-url>
 
 # Or install:
 pip install agent-repo-preflight
 agent-repo-preflight scan .
 ```
+
+> **Pre-release:** until the first PyPI release, install from source —
+> `pip install "git+https://github.com/scottcampbell/agent-repo-preflight"` (or clone and
+> `pip install -e .`). The PyPI release pipeline is ready; see [RELEASING.md](RELEASING.md).
 
 ### Commands & output formats
 
@@ -91,6 +95,15 @@ server-rendered HTML), SQLite-backed permalinks — no Node, no separate databas
 pip install 'agent-repo-preflight[web]'
 python -m agent_repo_preflight.web          # serves on http://127.0.0.1:8000
 ```
+
+**Host it** (e.g. on a VPS) with Docker:
+
+```bash
+docker compose up -d --build               # then put Caddy/nginx in front for TLS
+```
+
+Full instructions — auto-HTTPS with Caddy, rate-limiting a public endpoint, persistence —
+are in [docs/deploy.md](docs/deploy.md).
 
 Pages:
 
@@ -185,6 +198,7 @@ Rules are plain YAML in [`src/agent_repo_preflight/rules_data/`](src/agent_repo_
 - [Rule authoring](docs/rule-authoring.md) — write and test a new rule.
 - [AI-agent safety checklist](docs/ai-agent-safety-checklist.md) — a human checklist mirroring the rules.
 - [GitHub Action reference](docs/github-action.md) — inputs, outputs, gating, permissions.
+- [Deploy guide](docs/deploy.md) — host the web demo on a VPS (Docker, Caddy, TLS).
 
 ## License
 
