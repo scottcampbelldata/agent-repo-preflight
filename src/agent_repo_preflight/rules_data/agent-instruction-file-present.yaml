@@ -1,0 +1,13 @@
+id: agent-instruction-file-present
+name: Agent instruction file present
+severity: info
+category: agent-instructions
+blast_radius:
+- filesystem
+match:
+  facts:
+  - agent.instruction_file
+explanation: The repo contains AI-agent instruction files (CLAUDE.md, Cursor/Windsurf rules, Copilot instructions,
+  MCP config). These steer agent behavior and can contain hidden directives.
+remediation: Read all agent instruction files; they can change how an agent behaves in your repo.
+references: []

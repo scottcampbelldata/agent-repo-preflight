@@ -1,0 +1,22 @@
+id: dockerfile-remote-exec
+name: Dockerfile RUN fetches and executes remote content
+severity: medium
+category: dangerous-commands
+blast_radius:
+- network
+- shell
+match:
+  patterns:
+  - curl
+  - wget
+  - /dev/tcp
+  file_patterns:
+  - Dockerfile
+  - Dockerfile.*
+  - '*.dockerfile'
+explanation: A Dockerfile build step downloads and runs remote content. `docker build` executes
+  these steps, so this runs before review whenever the image is built.
+remediation: Pin and verify any downloaded artifacts (checksums); avoid piping remote scripts
+  into a shell inside RUN steps.
+references:
+- https://docs.docker.com/develop/develop-images/dockerfile_best-practices/

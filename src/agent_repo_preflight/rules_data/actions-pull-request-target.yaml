@@ -1,0 +1,14 @@
+id: actions-pull-request-target
+name: Workflow triggers on pull_request_target
+severity: medium
+category: ci
+blast_radius:
+- ci
+match:
+  facts:
+  - ci.pull_request_target
+explanation: '`pull_request_target` runs with repository secrets and write token in the context of an
+  untrusted PR, a frequent source of CI compromise.'
+remediation: Avoid pull_request_target, or never check out/run untrusted PR code in that context.
+references:
+- https://securitylab.github.com/research/github-actions-preventing-pwn-requests/

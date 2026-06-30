@@ -1,0 +1,14 @@
+id: chmod-exec-bit
+name: Sets executable bit on a file
+severity: low
+category: dangerous-commands
+blast_radius:
+- shell
+match:
+  facts:
+  - content.chmod_x
+explanation: '`chmod +x` makes a file executable. Common in legitimate setup, but in combination with
+  downloads it can stage a dropped binary for execution.'
+remediation: Confirm which file is made executable and where it came from.
+references:
+- https://attack.mitre.org/techniques/T1222/

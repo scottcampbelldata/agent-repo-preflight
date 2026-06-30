@@ -1,0 +1,14 @@
+id: encoded-powershell
+name: Encoded PowerShell command
+severity: high
+category: dangerous-commands
+blast_radius:
+- shell
+match:
+  facts:
+  - content.encoded_powershell
+explanation: '`powershell -enc` / `FromBase64String` runs a base64-encoded command, a standard obfuscation
+  technique to hide malicious behavior.'
+remediation: Decode the `-EncodedCommand` payload and review it before running.
+references:
+- https://attack.mitre.org/techniques/T1059/001/

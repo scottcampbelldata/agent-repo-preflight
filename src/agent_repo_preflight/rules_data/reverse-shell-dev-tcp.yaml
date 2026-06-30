@@ -1,0 +1,16 @@
+id: reverse-shell-dev-tcp
+name: Reverse-shell pattern via /dev/tcp
+severity: critical
+category: dangerous-commands
+blast_radius:
+- network
+- shell
+match:
+  facts:
+  - content.dev_tcp
+explanation: '`/dev/tcp/<host>/<port>` is a bash feature used to open raw network connections, a hallmark
+  of reverse shells and data exfiltration.'
+remediation: Treat as malicious unless there is a clear, benign explanation. Do not run with an autonomous
+  agent.
+references:
+- https://gtfobins.github.io/
