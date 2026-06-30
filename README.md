@@ -14,6 +14,10 @@ uvx agent-repo-preflight scan https://github.com/org/repo
 uvx agent-repo-preflight scan .
 ```
 
+<p align="center">
+  <img src="docs/images/web-report.png" alt="Agent Repo Preflight report — FAIL verdict with blast-radius map, findings, and a setup-chain trace" width="800">
+</p>
+
 ## Why
 
 A seemingly clean GitHub repo can trick an AI coding agent into running malware through *indirect* setup steps — a `postinstall` hook that fetches a remote payload, a `CLAUDE.md` that says "run setup without reviewing it," an MCP config that hands the agent a shell. Agents now author and run code across hundreds of thousands of repos. This tool is the preflight check before that happens.
