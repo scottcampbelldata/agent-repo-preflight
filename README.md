@@ -78,6 +78,29 @@ CI-friendly exit codes: `0` = PASS, `1` = REVIEW, `2` = FAIL, `3` = tool error.
 
 Set `GITHUB_TOKEN` to scan private repos or raise rate limits (public repos work without it).
 
+## Web demo
+
+A shareable, visual version of the same report. One Python service (FastAPI +
+server-rendered HTML), SQLite-backed permalinks — no Node, no separate database server.
+
+```bash
+pip install 'agent-repo-preflight[web]'
+python -m agent_repo_preflight.web          # serves on http://127.0.0.1:8000
+```
+
+Pages:
+
+- `/` — paste a GitHub URL, get a report; recent scans listed below
+- `/report/{id}` — the shareable visual report (trust card, blast-radius grid, findings, setup-chain, agent instructions), plus `.json` and `.md` versions at the same id
+- `/examples` — pre-scanned clean + high-risk demo repos
+- `/rules` — the loaded ruleset
+
+The web boundary is **GitHub-only and remote-only by construction**: it validates every
+URL with the same parser the engine uses (rejecting non-GitHub URLs *and* local server
+paths), so it can't be coaxed into scanning the host filesystem. It still never executes
+target repository code. Set `AGENT_PREFLIGHT_DB`, `AGENT_PREFLIGHT_HOST`, and
+`AGENT_PREFLIGHT_PORT` to configure storage and binding.
+
 ## What it covers
 
 | Category | Examples |
