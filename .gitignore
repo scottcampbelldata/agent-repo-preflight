@@ -14,3 +14,6 @@ htmlcov/
 # local scan databases
 preflight.db
 *.db
+
+.playwright-mcp/
+.screenshot.db
