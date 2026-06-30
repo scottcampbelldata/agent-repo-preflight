@@ -16,13 +16,16 @@ agent-repo-preflight = "agent_repo_preflight.cli.main:main"
 agent-preflight = "agent_repo_preflight.cli.main:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0"]
+dev = ["pytest>=8.0", "httpx>=0.27"]
+web = ["fastapi>=0.110", "jinja2>=3.1", "uvicorn>=0.29", "python-multipart>=0.0.9"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/agent_repo_preflight"]
 
 [tool.hatch.build.targets.wheel.force-include]
 "src/agent_repo_preflight/rules_data" = "agent_repo_preflight/rules_data"
+"src/agent_repo_preflight/web/templates" = "agent_repo_preflight/web/templates"
+"src/agent_repo_preflight/web/static" = "agent_repo_preflight/web/static"
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
