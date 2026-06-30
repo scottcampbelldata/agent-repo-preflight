@@ -8,7 +8,7 @@ from .base import register
 PATTERNS: dict[str, re.Pattern] = {
     "curl_pipe_sh": re.compile(r"curl\b[^\n|]*\|\s*(ba)?sh", re.I),
     "wget_pipe_sh": re.compile(r"wget\b[^\n|]*\|\s*(ba)?sh", re.I),
-    "invoke_webrequest": re.compile(r"Invoke-WebRequest|iwr\b|Invoke-RestMethod", re.I),
+    "invoke_webrequest": re.compile(r"Invoke-WebRequest|Invoke-RestMethod", re.I),
     "start_process": re.compile(r"Start-Process", re.I),
     "netcat": re.compile(r"\bnc\b\s+-[a-z]*e|\bncat\b", re.I),
     "socat": re.compile(r"\bsocat\b", re.I),
@@ -24,7 +24,8 @@ PATTERNS: dict[str, re.Pattern] = {
     ),
     "dev_tcp": re.compile(r"/dev/tcp/"),
     "cred_path_read": re.compile(
-        r"~/\.ssh|~/\.aws|\.npmrc|\.pypirc|\.aws/credentials|/etc/passwd|Login Data",
+        r"~/\.ssh|~/\.aws|\.aws/credentials|\.npmrc|\.pypirc|/etc/shadow"
+        r"|\.docker/config\.json|\.kube/config|id_rsa|Login Data",
         re.I,
     ),
 }

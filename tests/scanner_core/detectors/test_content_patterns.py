@@ -35,6 +35,32 @@ def test_detects_encoded_powershell():
     assert "encoded_powershell" in ids
 
 
+def test_iwr_alias_does_not_match_inside_words():
+    # 'defnyddiwr' (Welsh for "user") must not trigger the PowerShell iwr alias.
+    ids = _ids(ContentPatternDetector().detect(_tree("django.po", 'msgstr "defnyddiwr"\n')))
+    assert "invoke_webrequest" not in ids
+
+
+def test_invoke_webrequest_full_name_still_matches():
+    ids = _ids(ContentPatternDetector().detect(_tree("a.ps1", "Invoke-WebRequest http://x\n")))
+    assert "invoke_webrequest" in ids
+
+
+def test_etc_passwd_is_not_a_credential_signal():
+    # /etc/passwd appears constantly in benign comments/examples; too weak to flag.
+    ids = _ids(ContentPatternDetector().detect(_tree("a.py", "# see /etc/passwd for users\n")))
+    assert "cred_path_read" not in ids
+
+
+def test_strong_credential_paths_still_match():
+    ids = _ids(
+        ContentPatternDetector().detect(
+            _tree("a.sh", "cat ~/.ssh/id_rsa\ncat /etc/shadow\n")
+        )
+    )
+    assert "cred_path_read" in ids
+
+
 def test_shell_script_presence():
     facts = ShellScriptDetector().detect(_tree("install.sh", "echo hi\n"))
     assert any(

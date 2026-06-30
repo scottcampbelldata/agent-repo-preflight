@@ -10,3 +10,7 @@ build/
 .coverage
 htmlcov/
 .DS_Store
+
+# local scan databases
+preflight.db
+*.db
