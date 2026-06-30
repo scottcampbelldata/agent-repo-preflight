@@ -38,10 +38,10 @@ classifiers = [
 dependencies = ["rich>=13.0", "PyYAML>=6.0", "requests>=2.31"]
 
 [project.urls]
-Homepage = "https://github.com/scottcampbell/agent-repo-preflight"
-Repository = "https://github.com/scottcampbell/agent-repo-preflight"
-Issues = "https://github.com/scottcampbell/agent-repo-preflight/issues"
-Changelog = "https://github.com/scottcampbell/agent-repo-preflight/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/scottcampbelldata/agent-repo-preflight"
+Repository = "https://github.com/scottcampbelldata/agent-repo-preflight"
+Issues = "https://github.com/scottcampbelldata/agent-repo-preflight/issues"
+Changelog = "https://github.com/scottcampbelldata/agent-repo-preflight/blob/main/CHANGELOG.md"
 
 [project.scripts]
 agent-repo-preflight = "agent_repo_preflight.cli.main:main"

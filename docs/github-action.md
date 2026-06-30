@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: scottcampbell/agent-repo-preflight@v1
+      - uses: scottcampbelldata/agent-repo-preflight@v1
         with:
           path: "."
           fail-on: "FAIL"
@@ -79,7 +79,7 @@ risk — and pins the actions it uses to full commit SHAs.
 ## Outputs example
 
 ```yaml
-      - uses: scottcampbell/agent-repo-preflight@v1
+      - uses: scottcampbelldata/agent-repo-preflight@v1
         id: preflight
         with:
           fail-on: none

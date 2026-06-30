@@ -74,7 +74,7 @@ agent-repo-preflight scan .
 ```
 
 > **Pre-release:** until the first PyPI release, install from source —
-> `pip install "git+https://github.com/scottcampbell/agent-repo-preflight"` (or clone and
+> `pip install "git+https://github.com/scottcampbelldata/agent-repo-preflight"` (or clone and
 > `pip install -e .`). The PyPI release pipeline is ready; see [RELEASING.md](RELEASING.md).
 
 ### Commands & output formats
@@ -138,7 +138,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: scottcampbell/agent-repo-preflight@v1
+      - uses: scottcampbelldata/agent-repo-preflight@v1
         with:
           path: "."           # directory to scan (default ".")
           fail-on: "FAIL"     # FAIL | REVIEW | none (default "FAIL")
