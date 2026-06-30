@@ -24,9 +24,15 @@ _TEST_PATTERNS = (
 _DOC_NOTE = " [Match is in a documentation file, which is not auto-executed during agent setup.]"
 _TEST_NOTE = " [Match is in a test file, which is not auto-executed during agent setup.]"
 
+# .txt files that are configuration/manifests, not documentation — must keep full severity.
+_TXT_MANIFESTS = ("requirements", "constraints", "dev-requirements", "test-requirements")
+
 
 def _is_doc(path: str) -> bool:
-    return path.lower().endswith(_DOC_EXT)
+    base = path.lower().split("/")[-1]
+    if base.endswith(".txt") and any(base.startswith(m) for m in _TXT_MANIFESTS):
+        return False
+    return base.endswith(_DOC_EXT)
 
 
 def _is_test(path: str) -> bool:

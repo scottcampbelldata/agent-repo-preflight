@@ -1,0 +1,16 @@
+id: dependency-custom-registry
+name: Custom package registry or committed auth token
+severity: low
+category: dependencies
+blast_radius:
+- network
+- install_hooks
+match:
+  facts:
+  - dep.custom_registry
+explanation: The project configures a non-default package registry or contains a committed auth token.
+  A custom registry can serve modified packages (dependency confusion); a committed token is a leaked
+  credential.
+remediation: Confirm the registry is trusted. Never commit auth tokens; rotate any that were committed.
+references:
+- https://owasp.org/www-community/attacks/Dependency_Confusion

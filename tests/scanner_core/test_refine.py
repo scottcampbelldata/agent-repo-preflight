@@ -46,3 +46,11 @@ def test_various_test_path_conventions_downgraded():
 def test_real_source_file_not_downgraded():
     out = downgrade_documentation_findings([_f("src/setup.js", "critical")])
     assert out[0].severity == "critical"
+
+
+def test_requirements_txt_is_not_documentation():
+    # A dependency manifest ends in .txt but is config, not docs — keep full severity.
+    out = downgrade_documentation_findings(
+        [_f("requirements.txt", "medium", category="dependencies")]
+    )
+    assert out[0].severity == "medium"

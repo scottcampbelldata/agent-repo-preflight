@@ -1,0 +1,16 @@
+id: dependency-url-install
+name: Dependency installed from an arbitrary URL or VCS
+severity: medium
+category: dependencies
+blast_radius:
+- network
+- install_hooks
+match:
+  facts:
+  - dep.url_install
+explanation: A dependency is pinned to a git/URL/tarball source instead of a vetted package registry.
+  Installation pulls and runs code from that location, bypassing registry review and making the dependency
+  mutable.
+remediation: Prefer registry packages with pinned versions/hashes. Audit any git/URL dependency source.
+references:
+- https://owasp.org/www-project-top-ten/

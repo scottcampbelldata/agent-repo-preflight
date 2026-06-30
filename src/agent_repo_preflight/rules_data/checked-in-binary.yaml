@@ -1,0 +1,15 @@
+id: checked-in-binary
+name: Executable or native binary committed to the repository
+severity: medium
+category: dangerous-commands
+blast_radius:
+- shell
+- filesystem
+match:
+  facts:
+  - artifact.checked_in_binary
+explanation: A prebuilt executable / native library / installer is committed to the repo. Its source is
+  not reviewable, and an agent may run or load it during setup or tests.
+remediation: Verify the binary's provenance, or build it from source instead of committing it.
+references:
+- https://attack.mitre.org/techniques/T1105/

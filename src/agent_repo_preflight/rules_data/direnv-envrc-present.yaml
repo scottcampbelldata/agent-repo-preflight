@@ -1,0 +1,14 @@
+id: direnv-envrc-present
+name: direnv .envrc runs automatically on directory entry
+severity: low
+category: agent-instructions
+blast_radius:
+- shell
+match:
+  facts:
+  - editor.direnv_envrc
+explanation: A .envrc file is executed automatically by direnv when the directory is entered. If an agent's
+  environment has direnv enabled, this runs without explicit invocation.
+remediation: Review the .envrc. It is shell that runs on cd; treat it like any auto-run script.
+references:
+- https://direnv.net/
