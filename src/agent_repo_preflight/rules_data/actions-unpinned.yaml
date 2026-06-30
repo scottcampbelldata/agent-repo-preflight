@@ -1,0 +1,14 @@
+id: actions-unpinned
+name: Workflow uses an unpinned action
+severity: low
+category: ci
+blast_radius:
+- ci
+match:
+  facts:
+  - ci.unpinned_action
+explanation: An action is referenced by tag/branch instead of a full commit SHA, so its code can change
+  underneath you and run in CI.
+remediation: Pin third-party actions to a full 40-character commit SHA.
+references:
+- https://docs.github.com/actions/security-guides/security-hardening-for-github-actions

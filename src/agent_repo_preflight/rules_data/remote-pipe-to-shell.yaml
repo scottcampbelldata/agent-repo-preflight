@@ -1,0 +1,17 @@
+id: remote-pipe-to-shell
+name: Pipes downloaded content straight into a shell
+severity: critical
+category: dangerous-commands
+blast_radius:
+- network
+- shell
+match:
+  facts:
+  - content.curl_pipe_sh
+  - content.wget_pipe_sh
+explanation: '`curl ... | bash` (or wget) downloads a remote script and executes it immediately, with
+  no integrity check and no chance to review what runs.'
+remediation: Download the script to a file, read it, and only then run it. Never pipe network output directly
+  into a shell.
+references:
+- https://owasp.org/www-community/attacks/Code_Injection

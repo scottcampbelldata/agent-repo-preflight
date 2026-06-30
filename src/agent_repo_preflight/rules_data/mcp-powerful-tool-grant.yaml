@@ -1,0 +1,15 @@
+id: mcp-powerful-tool-grant
+name: MCP config grants a powerful tool
+severity: medium
+category: agent-instructions
+blast_radius:
+- shell
+- filesystem
+match:
+  facts:
+  - agent.mcp_tool_grant
+explanation: The MCP configuration exposes a high-privilege capability (shell, filesystem, exec, terminal).
+  An agent loading this config gains broad access to the host.
+remediation: Confirm each MCP server and tool is expected. Restrict shell/filesystem access where possible.
+references:
+- https://modelcontextprotocol.io/

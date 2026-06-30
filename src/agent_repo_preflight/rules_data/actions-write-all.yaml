@@ -1,0 +1,14 @@
+id: actions-write-all
+name: Workflow grants write-all permissions
+severity: high
+category: ci
+blast_radius:
+- ci
+match:
+  facts:
+  - ci.write_all_permissions
+explanation: '`permissions: write-all` gives the workflow''s GITHUB_TOKEN full write access to the repo,
+  increasing the blast radius if any step is compromised.'
+remediation: Scope permissions to the minimum required per job.
+references:
+- https://docs.github.com/actions/security-guides/automatic-token-authentication

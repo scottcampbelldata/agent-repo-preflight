@@ -1,0 +1,15 @@
+id: actions-untrusted-pr-exec
+name: pull_request_target checks out and runs untrusted PR code
+severity: critical
+category: ci
+blast_radius:
+- ci
+- shell
+match:
+  facts:
+  - ci.untrusted_checkout_exec
+explanation: A pull_request_target workflow checks out the PR head ref and runs scripts, executing attacker-controlled
+  code with secrets and a write-scoped token.
+remediation: Do not run untrusted PR code under pull_request_target. Split trusted/untrusted steps.
+references:
+- https://securitylab.github.com/research/github-actions-preventing-pwn-requests/

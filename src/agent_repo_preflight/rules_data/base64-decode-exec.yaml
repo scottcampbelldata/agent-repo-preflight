@@ -1,0 +1,14 @@
+id: base64-decode-exec
+name: Decodes base64 content and executes it
+severity: high
+category: dangerous-commands
+blast_radius:
+- shell
+match:
+  facts:
+  - content.base64_exec
+explanation: Decoding base64 and immediately executing it (`base64 -d | sh`, `eval(atob(...))`) hides
+  the real payload from casual review.
+remediation: Decode the payload manually and inspect it before allowing execution.
+references:
+- https://attack.mitre.org/techniques/T1140/

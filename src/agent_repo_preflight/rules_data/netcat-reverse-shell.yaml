@@ -1,0 +1,16 @@
+id: netcat-reverse-shell
+name: netcat/socat used for shell or relay
+severity: high
+category: dangerous-commands
+blast_radius:
+- network
+- shell
+match:
+  facts:
+  - content.netcat
+  - content.socat
+explanation: '`nc -e` / `ncat` / `socat` can bind a shell to a network socket, a common reverse-shell
+  mechanism.'
+remediation: Review why a network shell tool is invoked. Remove or sandbox before agent use.
+references:
+- https://gtfobins.github.io/

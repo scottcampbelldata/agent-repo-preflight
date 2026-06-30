@@ -1,0 +1,14 @@
+id: python-custom-build-backend
+name: pyproject declares a non-standard build backend
+severity: low
+category: install-hooks
+blast_radius:
+- install_hooks
+match:
+  facts:
+  - py.pyproject_build_hook
+explanation: A custom/unknown PEP 517 build backend runs arbitrary code during the build step. Usually
+  legitimate, but worth confirming the backend is a known project.
+remediation: Confirm the build-backend is a recognized, trusted project before building.
+references:
+- https://peps.python.org/pep-0517/

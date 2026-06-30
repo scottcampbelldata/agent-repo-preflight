@@ -1,0 +1,16 @@
+id: python-setup-network
+name: setup.py performs network or process execution at install time
+severity: high
+category: install-hooks
+blast_radius:
+- network
+- install_hooks
+match:
+  facts:
+  - py.setup_network
+explanation: '`setup.py` runs as Python code during `pip install`. Network calls or process execution
+  here let a package fetch and run code on install, before review.'
+remediation: Read setup.py before installing. Install from a wheel, or use `pip install --no-build-isolation`
+  only after inspection.
+references:
+- https://packaging.python.org/en/latest/discussions/setup-py-deprecated/

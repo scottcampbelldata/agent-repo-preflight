@@ -1,0 +1,24 @@
+id: node-postinstall-network-exec
+name: Install lifecycle script may run remote or dynamic code
+severity: critical
+category: install-hooks
+blast_radius:
+- network
+- shell
+- install_hooks
+match:
+  facts:
+  - pkg.lifecycle_script
+  patterns:
+  - curl
+  - wget
+  - node -e
+  - base64
+  - https?://
+explanation: An npm install lifecycle script (preinstall/postinstall/prepare) runs automatically during
+  `npm install`. This one references network access or dynamic-code execution, so an AI agent that installs
+  dependencies could fetch and run remote code before any review.
+remediation: Inspect the referenced script before installing. Run `npm install --ignore-scripts`, or pin/remove
+  the lifecycle hook.
+references:
+- https://docs.npmjs.com/cli/v10/using-npm/scripts

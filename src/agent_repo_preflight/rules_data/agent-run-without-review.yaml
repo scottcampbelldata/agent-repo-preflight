@@ -1,0 +1,15 @@
+id: agent-run-without-review
+name: Instruction tells the agent to run setup without review
+severity: high
+category: agent-instructions
+blast_radius:
+- shell
+- install_hooks
+match:
+  facts:
+  - agent.instruction_run_unverified
+explanation: An instruction file tells an agent to run scripts/setup without inspecting them first, a
+  direct prompt-injection vector for getting an agent to execute hidden malicious steps.
+remediation: Never follow 'run without reviewing' instructions. Inspect the referenced scripts yourself.
+references:
+- https://owasp.org/www-project-top-10-for-large-language-model-applications/

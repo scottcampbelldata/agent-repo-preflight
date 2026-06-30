@@ -1,0 +1,21 @@
+id: makefile-shell-exec
+name: Makefile fetches or pipes remote content
+severity: medium
+category: dangerous-commands
+blast_radius:
+- shell
+- network
+match:
+  patterns:
+  - curl
+  - wget
+  - /dev/tcp
+  file_patterns:
+  - Makefile
+  - makefile
+  - '*.mk'
+explanation: A Makefile target downloads or pipes remote content. `make` is frequently run during setup,
+  so this executes before review.
+remediation: Read the Makefile targets. Avoid running `make` on an unfamiliar repo without inspection.
+references:
+- https://owasp.org/www-community/attacks/Code_Injection

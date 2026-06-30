@@ -1,0 +1,14 @@
+id: dns-txt-payload
+name: DNS TXT record query (possible covert payload channel)
+severity: high
+category: dangerous-commands
+blast_radius:
+- network
+match:
+  facts:
+  - content.dns_txt
+explanation: Querying DNS TXT records is a known covert channel for retrieving payloads or C2 instructions
+  while blending in with normal DNS traffic.
+remediation: Investigate what the TXT lookup retrieves and why. Treat as suspicious in a setup script.
+references:
+- https://attack.mitre.org/techniques/T1071/004/

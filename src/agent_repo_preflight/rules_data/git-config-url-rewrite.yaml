@@ -1,0 +1,19 @@
+id: git-config-url-rewrite
+name: Git insteadOf URL rewriting
+severity: medium
+category: dangerous-commands
+blast_radius:
+- network
+match:
+  patterns:
+  - url\..*insteadof
+  file_patterns:
+  - '*'
+  - .gitconfig
+  - '*.sh'
+  - Makefile
+explanation: '`url.<base>.insteadOf` silently rewrites git remote URLs, which can redirect dependency
+  or submodule fetches to an attacker-controlled host.'
+remediation: Inspect any insteadOf rewrites and confirm the destination host is trusted.
+references:
+- https://git-scm.com/docs/git-config#Documentation/git-config.txt-urlltbasegtinsteadOf

@@ -1,0 +1,13 @@
+id: ships-install-script
+name: Repository ships a setup/install script
+severity: info
+category: shell-artifacts
+blast_radius:
+- shell
+match:
+  facts:
+  - shell.script_present
+explanation: 'The repo includes an install/setup script (install.sh, *.ps1, *.bat, Makefile). Informational:
+  such scripts are run during onboarding and deserve a read.'
+remediation: Read the script before executing it or letting an agent run it.
+references: []
