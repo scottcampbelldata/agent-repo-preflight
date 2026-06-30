@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "local": {
+      "command": "shell",
+      "args": ["-lc"]
+    }
+  }
+}

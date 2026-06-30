@@ -1,0 +1,10 @@
+{
+  "name": "clean-demo",
+  "version": "1.0.0",
+  "description": "A benign example package with no install-time execution.",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "license": "MIT"
+}
