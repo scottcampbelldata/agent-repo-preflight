@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 import json
+
 from ..scanner_core.model import ReportModel
 
 

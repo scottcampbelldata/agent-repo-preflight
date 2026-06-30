@@ -1,10 +1,12 @@
 from __future__ import annotations
+
 import gzip
 import io
 import tarfile
 from urllib.parse import urlparse
-from .filetree import FileEntry, FileTree
+
 from .acquire_local import _decode
+from .filetree import FileEntry, FileTree
 
 
 def parse_github_url(url: str) -> tuple[str, str, str | None]:
@@ -53,15 +55,14 @@ def load_tarball_bytes(
 
 def _default_fetch(url: str) -> bytes:
     import os
+
     import requests
 
     headers = {"User-Agent": "agent-repo-preflight"}
     token = os.environ.get("GITHUB_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
-    resp = requests.get(
-        url, headers=headers, timeout=30, stream=True, allow_redirects=True
-    )
+    resp = requests.get(url, headers=headers, timeout=30, stream=True, allow_redirects=True)
     resp.raise_for_status()
     chunks, total = [], 0
     for chunk in resp.iter_content(8192):

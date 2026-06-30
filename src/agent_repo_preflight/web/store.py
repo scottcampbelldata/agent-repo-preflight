@@ -1,7 +1,8 @@
 from __future__ import annotations
+
 import json
-import sqlite3
 import secrets
+import sqlite3
 from typing import Protocol
 
 _DDL = """CREATE TABLE IF NOT EXISTS scans (
@@ -47,9 +48,7 @@ class SqliteScanStore:
 
     def get(self, id: str) -> dict | None:
         with self._conn() as c:
-            row = c.execute(
-                "SELECT report_json FROM scans WHERE id=?", (id,)
-            ).fetchone()
+            row = c.execute("SELECT report_json FROM scans WHERE id=?", (id,)).fetchone()
         return json.loads(row["report_json"]) if row else None
 
     def list_recent(self, limit: int = 20) -> list[dict]:

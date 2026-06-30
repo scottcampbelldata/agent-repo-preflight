@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from .findings import Finding
 
 SEVERITY_WEIGHT = {"info": 0, "low": 1, "medium": 4, "high": 8, "critical": 16}

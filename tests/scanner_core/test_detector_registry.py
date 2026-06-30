@@ -1,6 +1,6 @@
-from agent_repo_preflight.scanner_core.facts import Fact
 from agent_repo_preflight.scanner_core.detectors.base import run_detectors
-from agent_repo_preflight.scanner_core.filetree import FileTree, FileEntry
+from agent_repo_preflight.scanner_core.facts import Fact
+from agent_repo_preflight.scanner_core.filetree import FileEntry, FileTree
 
 
 class _Dummy:

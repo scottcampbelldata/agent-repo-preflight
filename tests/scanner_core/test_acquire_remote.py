@@ -1,11 +1,13 @@
 import io
 import tarfile
+
 import pytest
+
 from agent_repo_preflight.scanner_core.acquire_remote import (
+    load_remote,
+    load_tarball_bytes,
     parse_github_url,
     tarball_url,
-    load_tarball_bytes,
-    load_remote,
 )
 
 
@@ -35,10 +37,7 @@ def test_parse_github_url():
 
 def test_tarball_url():
     assert tarball_url("org", "repo") == "https://codeload.github.com/org/repo/tar.gz/HEAD"
-    assert (
-        tarball_url("org", "repo", "main")
-        == "https://codeload.github.com/org/repo/tar.gz/main"
-    )
+    assert tarball_url("org", "repo", "main") == "https://codeload.github.com/org/repo/tar.gz/main"
 
 
 def test_load_tarball_strips_root_component():

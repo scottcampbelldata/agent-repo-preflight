@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 from typing import Protocol
+
 from ..facts import Fact
 from ..filetree import FileTree
 
@@ -18,9 +20,7 @@ def register(detector: Detector) -> Detector:
     return detector
 
 
-def run_detectors(
-    tree: FileTree, detectors: list[Detector] | None = None
-) -> list[Fact]:
+def run_detectors(tree: FileTree, detectors: list[Detector] | None = None) -> list[Fact]:
     facts: list[Fact] = []
     for d in detectors if detectors is not None else ALL_DETECTORS:
         facts.extend(d.detect(tree))

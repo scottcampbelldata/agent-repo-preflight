@@ -1,5 +1,6 @@
 import pytest
-from agent_repo_preflight.scanner_core.rules import load_rules, Rule, RuleError, SEVERITIES
+
+from agent_repo_preflight.scanner_core.rules import SEVERITIES, RuleError, load_rules
 
 
 def test_load_valid_rule(tmp_path):

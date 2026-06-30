@@ -1,8 +1,10 @@
 from io import StringIO
+
 from rich.console import Console
+
 from agent_repo_preflight.report_renderer.terminal_report import render_terminal
+from agent_repo_preflight.scanner_core.filetree import FileEntry, FileTree
 from agent_repo_preflight.scanner_core.scan import scan_tree
-from agent_repo_preflight.scanner_core.filetree import FileTree, FileEntry
 
 
 def test_terminal_render_outputs_verdict_and_disclaimer():

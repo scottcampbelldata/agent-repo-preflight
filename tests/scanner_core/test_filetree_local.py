@@ -1,4 +1,3 @@
-from pathlib import Path
 from agent_repo_preflight.scanner_core.acquire_local import load_local
 
 
@@ -22,4 +21,6 @@ def test_load_local_skips_git_and_respects_caps(tmp_path):
     tree = load_local(str(tmp_path), max_file_bytes=10)
     assert tree.get(".git/config") is None  # .git always skipped
     big = tree.get("big.txt")
-    assert big.is_binary is False and big.text is None and big.size == 50  # oversized: recorded, not read
+    assert (
+        big.is_binary is False and big.text is None and big.size == 50
+    )  # oversized: recorded, not read

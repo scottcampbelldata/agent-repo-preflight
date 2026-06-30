@@ -1,6 +1,7 @@
 from __future__ import annotations
+
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import (
@@ -12,13 +13,13 @@ from fastapi.responses import (
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from ..scanner_core.scan import scan_tree
+from ..report_renderer.markdown_report import render_markdown
 from ..scanner_core.acquire_local import load_local
 from ..scanner_core.acquire_remote import load_remote, parse_github_url
 from ..scanner_core.model import ReportModel
 from ..scanner_core.rules import load_rules
-from ..report_renderer.markdown_report import render_markdown
-from .store import SqliteScanStore, ScanStore
+from ..scanner_core.scan import scan_tree
+from .store import ScanStore, SqliteScanStore
 
 _HERE = os.path.dirname(__file__)
 _TEMPLATES = os.path.join(_HERE, "templates")
@@ -26,7 +27,7 @@ _STATIC = os.path.join(_HERE, "static")
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def _remote_scan(target: str, *, scanned_at: str = "") -> ReportModel:
@@ -55,13 +56,9 @@ def _seed_examples(store: ScanStore) -> list[dict]:
         path = os.path.join(ex_dir, name)
         if not os.path.isdir(path):
             continue
-        report = scan_tree(
-            load_local(path), source=f"example:{name}", scanned_at=_now()
-        )
+        report = scan_tree(load_local(path), source=f"example:{name}", scanned_at=_now())
         sid = store.save(report.to_dict(), created_at=_now())
-        seeded.append(
-            {"id": sid, "name": name, "verdict": report.verdict, "score": report.score}
-        )
+        seeded.append({"id": sid, "name": name, "verdict": report.verdict, "score": report.score})
     return seeded
 
 
@@ -79,9 +76,7 @@ def create_app(store: ScanStore | None = None, scanner=None) -> FastAPI:
 
     @app.get("/", response_class=HTMLResponse)
     def home(request: Request):
-        return templates.TemplateResponse(
-            request, "index.html", {"recent": store.list_recent(10)}
-        )
+        return templates.TemplateResponse(request, "index.html", {"recent": store.list_recent(10)})
 
     @app.post("/scan")
     def run_scan(request: Request, target: str = Form(...)):
@@ -138,20 +133,14 @@ def create_app(store: ScanStore | None = None, scanner=None) -> FastAPI:
                 {"message": "No report with that id."},
                 status_code=404,
             )
-        return templates.TemplateResponse(
-            request, "report.html", {"report": data, "id": id}
-        )
+        return templates.TemplateResponse(request, "report.html", {"report": data, "id": id})
 
     @app.get("/examples", response_class=HTMLResponse)
     def examples_page(request: Request):
-        return templates.TemplateResponse(
-            request, "examples.html", {"examples": examples}
-        )
+        return templates.TemplateResponse(request, "examples.html", {"examples": examples})
 
     @app.get("/rules", response_class=HTMLResponse)
     def rules_page(request: Request):
-        return templates.TemplateResponse(
-            request, "rules.html", {"rules": load_rules()}
-        )
+        return templates.TemplateResponse(request, "rules.html", {"rules": load_rules()})
 
     return app

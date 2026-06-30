@@ -1,10 +1,10 @@
+from agent_repo_preflight.scanner_core.findings import Finding
 from agent_repo_preflight.scanner_core.score import (
+    SEVERITY_WEIGHT,
+    blast_radius_rollup,
     score,
     verdict,
-    blast_radius_rollup,
-    SEVERITY_WEIGHT,
 )
-from agent_repo_preflight.scanner_core.findings import Finding
 
 
 def _f(sev, cat="c", blast=None):

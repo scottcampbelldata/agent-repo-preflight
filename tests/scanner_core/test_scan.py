@@ -1,6 +1,6 @@
-from agent_repo_preflight.scanner_core.scan import scan_tree
+from agent_repo_preflight.scanner_core.filetree import FileEntry, FileTree
 from agent_repo_preflight.scanner_core.model import DISCLAIMER
-from agent_repo_preflight.scanner_core.filetree import FileTree, FileEntry
+from agent_repo_preflight.scanner_core.scan import scan_tree
 
 
 def test_scan_tree_flags_postinstall_network():

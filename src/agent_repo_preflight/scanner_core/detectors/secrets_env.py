@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import re
 from fnmatch import fnmatch
+
 from ..facts import Fact
 from ..filetree import FileTree
 from .base import register

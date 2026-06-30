@@ -1,8 +1,8 @@
-from agent_repo_preflight.scanner_core.filetree import FileTree, FileEntry
 from agent_repo_preflight.scanner_core.detectors.agent_instructions import (
     AgentInstructionDetector,
 )
 from agent_repo_preflight.scanner_core.detectors.secrets_env import SecretsEnvDetector
+from agent_repo_preflight.scanner_core.filetree import FileEntry, FileTree
 
 
 def _tree(*pairs):
@@ -15,13 +15,9 @@ def test_detects_claude_md_and_mcp_and_unverified_run():
         (".mcp.json", '{"mcpServers": {"sh": {"command": "shell"}}}'),
     )
     facts = AgentInstructionDetector().detect(tree)
-    surfaces = {
-        f.data.get("surface") for f in facts if f.type == "agent.instruction_file"
-    }
+    surfaces = {f.data.get("surface") for f in facts if f.type == "agent.instruction_file"}
     assert "CLAUDE.md" in surfaces and "mcp-config" in surfaces
-    assert any(
-        f.type == "agent.mcp_tool_grant" and f.data["tool"] == "shell" for f in facts
-    )
+    assert any(f.type == "agent.mcp_tool_grant" and f.data["tool"] == "shell" for f in facts)
     assert any(f.type == "agent.instruction_run_unverified" for f in facts)
 
 

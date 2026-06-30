@@ -1,8 +1,9 @@
 import json
+
 from agent_repo_preflight.report_renderer.json_report import render_json
 from agent_repo_preflight.report_renderer.markdown_report import render_markdown
+from agent_repo_preflight.scanner_core.filetree import FileEntry, FileTree
 from agent_repo_preflight.scanner_core.scan import scan_tree
-from agent_repo_preflight.scanner_core.filetree import FileTree, FileEntry
 
 
 def _report():

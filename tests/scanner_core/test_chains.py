@@ -1,6 +1,6 @@
 from agent_repo_preflight.scanner_core.chains import build_chains
 from agent_repo_preflight.scanner_core.facts import Fact
-from agent_repo_preflight.scanner_core.filetree import FileTree, FileEntry
+from agent_repo_preflight.scanner_core.filetree import FileEntry, FileTree
 
 
 def test_builds_chain_from_postinstall_to_script_fetch():

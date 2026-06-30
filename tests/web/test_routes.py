@@ -1,9 +1,10 @@
 import pytest
 from starlette.testclient import TestClient
+
+from agent_repo_preflight.scanner_core.filetree import FileEntry, FileTree
+from agent_repo_preflight.scanner_core.scan import scan_tree
 from agent_repo_preflight.web.app import create_app
 from agent_repo_preflight.web.store import SqliteScanStore
-from agent_repo_preflight.scanner_core.scan import scan_tree
-from agent_repo_preflight.scanner_core.filetree import FileTree, FileEntry
 
 
 def _fake_scanner(target, *, scanned_at=""):
@@ -24,9 +25,7 @@ def test_home_ok(client):
 
 
 def test_scan_then_report(client):
-    r = client.post(
-        "/scan", data={"target": "https://github.com/o/r"}, follow_redirects=True
-    )
+    r = client.post("/scan", data={"target": "https://github.com/o/r"}, follow_redirects=True)
     assert r.status_code == 200
     assert "FAIL" in r.text and "node-postinstall-network-exec" in r.text
     assert "does not prove a repository is safe" in r.text

@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import re
 from dataclasses import dataclass, field
+
 from .facts import Fact
 from .filetree import FileTree
 
@@ -23,9 +25,7 @@ _SCRIPT_REF = re.compile(r"([\w./-]+\.(?:js|cjs|mjs|sh|py|ts))")
 
 def _readme_mentions_install(tree: FileTree) -> ChainStep | None:
     for e in tree.match("README*"):
-        if e.text and re.search(
-            r"npm install|yarn|pnpm install|pip install|setup", e.text, re.I
-        ):
+        if e.text and re.search(r"npm install|yarn|pnpm install|pip install|setup", e.text, re.I):
             return ChainStep(
                 "readme_instruction", e.path, 1, "README instructs running install/setup"
             )
@@ -58,13 +58,9 @@ def build_chains(facts: list[Fact], tree: FileTree) -> list[Chain]:
             ref = m.group(1).lstrip("./")
             target = next((e for e in tree.entries if e.path.endswith(ref)), None)
             if target:
-                steps.append(
-                    ChainStep("referenced_script", target.path, 1, f"runs {target.path}")
-                )
+                steps.append(ChainStep("referenced_script", target.path, 1, f"runs {target.path}"))
                 for cf in content_by_file.get(target.path, []):
-                    steps.append(
-                        ChainStep("dangerous_call", cf.file, cf.line, cf.evidence)
-                    )
+                    steps.append(ChainStep("dangerous_call", cf.file, cf.line, cf.evidence))
         if len(steps) >= 2:
             chains.append(Chain(steps))
     return chains
