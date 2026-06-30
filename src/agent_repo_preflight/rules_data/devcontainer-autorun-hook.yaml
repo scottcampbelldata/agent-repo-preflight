@@ -1,0 +1,17 @@
+id: devcontainer-autorun-hook
+name: Dev Container lifecycle command runs automatically on open
+severity: low
+category: agent-instructions
+blast_radius:
+- install_hooks
+- shell
+match:
+  facts:
+  - agent.devcontainer_hook
+explanation: A devcontainer.json lifecycle command (postCreateCommand, onCreateCommand, etc.) runs automatically
+  when an AI agent opens this repo in a Codespace or Dev Container, before any code is reviewed. Inspect
+  what it runs.
+remediation: Read the referenced command/script. Avoid auto-running unreviewed setup in a container an
+  agent controls.
+references:
+- https://containers.dev/implementors/json_reference/

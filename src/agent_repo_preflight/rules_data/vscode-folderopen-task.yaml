@@ -1,0 +1,16 @@
+id: vscode-folderopen-task
+name: VS Code task auto-runs when the folder is opened
+severity: medium
+category: agent-instructions
+blast_radius:
+- shell
+- install_hooks
+match:
+  facts:
+  - editor.vscode_autotask
+explanation: 'A .vscode/tasks.json task is configured with runOn: folderOpen, so it executes automatically
+  the moment the folder is opened in VS Code or an agent''s editor session - a known way to get code to
+  run without the user invoking it.'
+remediation: 'Remove runOn: folderOpen, or confirm the command is safe and necessary.'
+references:
+- https://code.visualstudio.com/docs/editor/tasks#_run-behavior

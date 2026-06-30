@@ -6,8 +6,10 @@ from .acquire_local import load_local
 from .acquire_remote import load_remote, parse_github_url
 from .chains import build_chains
 from .detectors import (  # noqa: F401  (import for register() side effects)
+    agent_autoexec,
     agent_instructions,
     content_patterns,
+    dependency_risk,
     github_actions,
     install_hooks,
     secrets_env,
