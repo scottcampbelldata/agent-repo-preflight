@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <h1>Example reports</h1>
+  <p class="lede">Pre-scanned demo repositories, so you can see the report before scanning your own.</p>
+  <ul class="recent-list">
+    {% for ex in examples %}
+    <li>
+      <a href="/report/{{ ex.id }}">
+        <span class="verdict-pill verdict-{{ ex.verdict|lower }}">{{ ex.verdict }}</span>
+        <span class="recent-name">{{ ex.name }}</span>
+        <span class="recent-score">score {{ ex.score }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

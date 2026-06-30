@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <h1>Rules <span class="count">{{ rules|length }}</span></h1>
+  <p class="lede">Deterministic rules the scanner applies. Contribute more in YAML.</p>
+  <table class="rules-table">
+    <thead><tr><th>Severity</th><th>Rule</th><th>Category</th><th>What it catches</th></tr></thead>
+    <tbody>
+      {% for r in rules %}
+      <tr>
+        <td><span class="sev-tag sev-tag-{{ r.severity }}">{{ r.severity|upper }}</span></td>
+        <td><code>{{ r.id }}</code></td>
+        <td>{{ r.category }}</td>
+        <td>{{ r.name }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

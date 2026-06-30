@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}{{ report.verdict }} — {{ report.repo.name }} — Agent Repo Preflight{% endblock %}
+{% block content %}
+{% set v = report.verdict|lower %}
+<section class="trust-card trust-{{ v }}">
+  <div class="trust-verdict">{{ report.verdict }}</div>
+  <div class="trust-meta">
+    <div class="trust-headline">
+      {% if report.verdict == "FAIL" %}Human review required before agent use
+      {% elif report.verdict == "REVIEW" %}Human review recommended before agent use
+      {% else %}No blocking risk indicators found{% endif %}
+    </div>
+    <div class="trust-sub">
+      <code>{{ report.repo.source }}</code> · risk score {{ report.score }}
+    </div>
+  </div>
+  <div class="trust-formats">
+    <a href="/report/{{ id }}.json">JSON</a>
+    <a href="/report/{{ id }}.md">Markdown</a>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Blast radius</h2>
+  <div class="blast-grid">
+    {% for cap, level in report.blast_radius.items() %}
+    <div class="blast-chip blast-{{ level|lower }}">
+      <span class="blast-cap">{{ cap|replace("_"," ") }}</span>
+      <span class="blast-level">{{ level }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Findings <span class="count">{{ report.findings|length }}</span></h2>
+  {% if report.findings %}
+  <ul class="findings">
+    {% for f in report.findings %}
+    <li class="finding sev-{{ f.severity }}">
+      <div class="finding-head">
+        <span class="sev-tag sev-tag-{{ f.severity }}">{{ f.severity|upper }}</span>
+        <span class="finding-rule">{{ f.rule_id }}</span>
+        <span class="finding-loc"><code>{{ f.file }}:{{ f.line }}</code></span>
+      </div>
+      {% if f.evidence %}<pre class="finding-evidence">{{ f.evidence }}</pre>{% endif %}
+      <p class="finding-explain">{{ f.explanation }}</p>
+      <p class="finding-remedy"><strong>Remediation:</strong> {{ f.remediation }}</p>
+      {% if f.blast_radius %}
+      <div class="finding-caps">{% for c in f.blast_radius %}<span class="cap-tag">{{ c|replace("_"," ") }}</span>{% endfor %}</div>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty">No findings.</p>
+  {% endif %}
+</section>
+
+{% if report.chains %}
+<section class="panel">
+  <h2>Suspicious setup chains <span class="heuristic">heuristic</span></h2>
+  {% for chain in report.chains %}
+  <ol class="chain">
+    {% for step in chain.steps %}
+    <li class="chain-step">
+      <span class="chain-kind">{{ step.kind|replace("_"," ") }}</span>
+      <code class="chain-loc">{{ step.file }}:{{ step.line }}</code>
+      <span class="chain-detail">{{ step.detail }}</span>
+    </li>
+    {% endfor %}
+  </ol>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if report.agent_instructions %}
+<section class="panel">
+  <h2>Agent instruction surfaces</h2>
+  <ul class="instr-list">
+    {% for ai in report.agent_instructions %}
+    <li><span class="instr-surface">{{ ai.surface }}</span> <code>{{ ai.file }}</code></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<p class="disclaimer">{{ report.disclaimer }}</p>
+{% endblock %}
