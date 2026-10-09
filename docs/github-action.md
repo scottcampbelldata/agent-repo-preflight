@@ -54,8 +54,8 @@ permissions:
   pull-requests: write    # post the PR comment (omit if comment: "false")
 ```
 
-It never requests `write-all` — consistent with what the scanner itself flags as a CI
-risk — and pins the actions it uses to full commit SHAs.
+It never requests `write-all` - consistent with what the scanner itself flags as a CI
+risk - and pins the actions it uses to full commit SHAs.
 
 ## Gating behavior
 

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ report.verdict }} — {{ report.repo.name }} — Agent Repo Preflight{% endblock %}
+{% block title %}{{ report.verdict }} - {{ report.repo.name }} - Agent Repo Preflight{% endblock %}
 {% block content %}
 {% set v = report.verdict|lower %}
 <section class="trust-card trust-{{ v }}">

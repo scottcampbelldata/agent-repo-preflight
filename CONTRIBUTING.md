@@ -16,23 +16,23 @@ ruff format src tests        # format
 
 Most detection lives in plain YAML under
 [`src/agent_repo_preflight/rules_data/`](src/agent_repo_preflight/rules_data/).
-Adding a rule is the lowest-friction way to improve coverage — see
+Adding a rule is the lowest-friction way to improve coverage - see
 [docs/rule-authoring.md](docs/rule-authoring.md) for the schema and the list of
 detector facts you can match against.
 
 ## Project shape
 
-- `scanner_core/` — the deterministic engine: acquire → detectors → rules → chains → score.
-- `report_renderer/` — terminal / JSON / Markdown output.
-- `web/` — the FastAPI demo (optional `[web]` extra).
-- `rules_data/` — the YAML ruleset.
-- `examples/` — intentionally unsafe demo repos that double as integration fixtures.
+- `scanner_core/` - the deterministic engine: acquire → detectors → rules → chains → score.
+- `report_renderer/` - terminal / JSON / Markdown output.
+- `web/` - the FastAPI demo (optional `[web]` extra).
+- `rules_data/` - the YAML ruleset.
+- `examples/` - intentionally unsafe demo repos that double as integration fixtures.
 
 ## Ground rules
 
 - **Never make the scanner execute target repository code.** Acquisition is
   download-and-read only. No `subprocess` on target files, no `eval`/`exec`, no git.
-- **Detection stays deterministic** — no LLM, no randomness in the scan path. (AI, if
+- **Detection stays deterministic** - no LLM, no randomness in the scan path. (AI, if
   ever added, may *explain* findings; it must never *produce* them.)
 - **Test-driven.** Add a failing test, then the code. Detector tests go in
   `tests/scanner_core/detectors/`; end-to-end behavior can be asserted via an
@@ -47,7 +47,7 @@ detector facts you can match against.
 ruff check src tests && ruff format --check src tests && python -m pytest -q
 ```
 
-All three must pass — CI runs the same gates.
+All three must pass - CI runs the same gates.
 
 ## Licensing of contributions
 

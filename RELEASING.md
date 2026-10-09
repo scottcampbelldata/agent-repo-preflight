@@ -1,7 +1,7 @@
 # Releasing
 
 Publishing is automated via `.github/workflows/release.yml`, which builds and uploads to
-PyPI using **Trusted Publishing** (OIDC) — no API token is stored in the repo.
+PyPI using **Trusted Publishing** (OIDC) - no API token is stored in the repo.
 
 ## One-time setup on PyPI
 
@@ -24,7 +24,7 @@ PyPI using **Trusted Publishing** (OIDC) — no API token is stored in the repo.
    git commit -am "release: v0.2.0"
    ```
 
-4. Tag and push — this triggers the release workflow:
+4. Tag and push - this triggers the release workflow:
 
    ```bash
    git tag v0.2.0

@@ -1,6 +1,6 @@
 # Minimal VPS deployment for the agent-repo-preflight web demo.
 #   docker compose up -d --build
-# Then put a reverse proxy (Caddy/nginx) in front for TLS — see docs/deploy.md.
+# Then put a reverse proxy (Caddy/nginx) in front for TLS - see docs/deploy.md.
 services:
   web:
     build: .

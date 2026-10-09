@@ -10,4 +10,4 @@ npm install
 npm test
 ```
 
-Everything this package does is in `src/`. Read it — there are no hidden steps.
+Everything this package does is in `src/`. Read it - there are no hidden steps.

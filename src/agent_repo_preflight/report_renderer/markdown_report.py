@@ -3,9 +3,9 @@ from __future__ import annotations
 from ..scanner_core.model import ReportModel
 
 _VERDICT_LINE = {
-    "PASS": "✅ PASS — no blocking risk indicators found",
-    "REVIEW": "⚠️ REVIEW — human review recommended before agent use",
-    "FAIL": "⛔ FAIL — human review required before agent use",
+    "PASS": "✅ PASS - no blocking risk indicators found",
+    "REVIEW": "⚠️ REVIEW - human review recommended before agent use",
+    "FAIL": "⛔ FAIL - human review required before agent use",
 }
 
 
@@ -37,7 +37,7 @@ def render_markdown(report: ReportModel) -> str:
     if r.agent_instructions:
         lines += ["", "## Agent instruction surfaces", ""]
         for ai in r.agent_instructions:
-            lines.append(f"- **{ai['surface']}** — `{ai['file']}`")
+            lines.append(f"- **{ai['surface']}** - `{ai['file']}`")
     if r.chains:
         lines += ["", "## Suspicious setup chains (heuristic)", ""]
         for c in r.chains:

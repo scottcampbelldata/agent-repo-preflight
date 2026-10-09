@@ -21,5 +21,5 @@ jobs:
         with:
           path: "."
           # This repo intentionally ships malicious example fixtures under examples/,
-          # so a FAIL is expected here — comment only, do not fail the build.
+          # so a FAIL is expected here - comment only, do not fail the build.
           fail-on: "none"

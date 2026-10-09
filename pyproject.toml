@@ -55,7 +55,7 @@ web = ["fastapi>=0.110", "jinja2>=3.1", "uvicorn>=0.29", "python-multipart>=0.0.
 packages = ["src/agent_repo_preflight"]
 # Non-.py data files (rule YAMLs, web templates, static assets) live inside the
 # package directory and are included automatically by hatchling. No force-include
-# is needed — adding one double-packages the files and fails the build.
+# is needed - adding one double-packages the files and fails the build.
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

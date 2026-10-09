@@ -24,7 +24,7 @@ _TEST_PATTERNS = (
 _DOC_NOTE = " [Match is in a documentation file, which is not auto-executed during agent setup.]"
 _TEST_NOTE = " [Match is in a test file, which is not auto-executed during agent setup.]"
 
-# .txt files that are configuration/manifests, not documentation — must keep full severity.
+# .txt files that are configuration/manifests, not documentation - must keep full severity.
 _TXT_MANIFESTS = ("requirements", "constraints", "dev-requirements", "test-requirements")
 
 
@@ -52,7 +52,7 @@ def downgrade_documentation_findings(findings: list[Finding]) -> list[Finding]:
     CLAUDE.md regardless of extension, so those keep their assigned severity.
 
     Tradeoff: a payload deliberately hidden under a ``tests/`` path is downgraded,
-    not suppressed — it still appears as a low finding. Install-hook, CI, and
+    not suppressed - it still appears as a low finding. Install-hook, CI, and
     agent-instruction findings are never downgraded, so the common auto-execution
     vectors keep full severity. This is a triage tool, not a safety guarantee.
     """

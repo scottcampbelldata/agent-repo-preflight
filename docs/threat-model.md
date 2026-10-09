@@ -4,7 +4,7 @@
 
 AI coding agents (Claude Code, Codex, Cursor, Copilot Agent, Windsurf, Aider) routinely
 clone unfamiliar repositories and then **install dependencies, run setup scripts, and
-execute build/test commands** on the developer's machine — often with limited human
+execute build/test commands** on the developer's machine - often with limited human
 review of what those steps actually do. The repository is no longer just data the
 developer reads; it is a set of instructions an autonomous agent may carry out.
 
@@ -17,7 +17,7 @@ lifecycle hook.
 - **Code execution on the developer's host** at clone/install/build time.
 - **Credential theft** (`~/.ssh`, `~/.aws`, `.npmrc`, `.pypirc`, browser login data, CI secrets).
 - **Persistence / C2** via reverse shells or covert channels.
-- **Supply-chain pivot** — using the compromised host or its tokens to attack downstream.
+- **Supply-chain pivot** - using the compromised host or its tokens to attack downstream.
 
 ## Attack surfaces this scanner inspects
 
@@ -34,7 +34,7 @@ lifecycle hook.
 
 ## What the scanner does NOT do
 
-- It **does not execute** the target repository's code — by design. It downloads a
+- It **does not execute** the target repository's code - by design. It downloads a
   tarball (no `git`), extracts it in memory, and only reads files.
 - It **does not prove safety.** It reports the presence or absence of known risk
   indicators. A determined attacker can write a payload that no static rule catches.
@@ -47,6 +47,6 @@ lifecycle hook.
 
 Treat the verdict as triage, not a gate you can blindly trust:
 
-- **FAIL** — do not run with an autonomous agent until a human reviews the flagged paths.
-- **REVIEW** — read the findings; decide deliberately.
-- **PASS** — no known indicators fired. Still read code before running it.
+- **FAIL** - do not run with an autonomous agent until a human reviews the flagged paths.
+- **REVIEW** - read the findings; decide deliberately.
+- **PASS** - no known indicators fired. Still read code before running it.

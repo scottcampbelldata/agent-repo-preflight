@@ -5,9 +5,9 @@
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
 
-**Paste a GitHub repo. Get a "safe for AI agent use?" report — before you let Claude Code, Codex, Cursor, Copilot Agent, or Windsurf clone, install, or run it.**
+**Paste a GitHub repo. Get a "safe for AI agent use?" report - before you let Claude Code, Codex, Cursor, Copilot Agent, or Windsurf clone, install, or run it.**
 
-A local-first scanner that audits a repository for hidden execution risks **before** an AI coding agent touches it. It never runs the target repo's code — it reads files, parses install hooks, agent-instruction files, MCP configs, and CI workflows, and reports a deterministic verdict.
+A local-first scanner that audits a repository for hidden execution risks **before** an AI coding agent touches it. It never runs the target repo's code - it reads files, parses install hooks, agent-instruction files, MCP configs, and CI workflows, and reports a deterministic verdict.
 
 ```bash
 uvx agent-repo-preflight scan https://github.com/org/repo
@@ -16,16 +16,16 @@ uvx agent-repo-preflight scan .
 ```
 
 <p align="center">
-  <img src="docs/images/web-report.png" alt="Agent Repo Preflight report — FAIL verdict with blast-radius map, findings, and a setup-chain trace" width="800">
+  <img src="docs/images/web-report.png" alt="Agent Repo Preflight report - FAIL verdict with blast-radius map, findings, and a setup-chain trace" width="800">
 </p>
 
 ## Why
 
-A seemingly clean GitHub repo can trick an AI coding agent into running malware through *indirect* setup steps — a `postinstall` hook that fetches a remote payload, a `CLAUDE.md` that says "run setup without reviewing it," an MCP config that hands the agent a shell. Agents now author and run code across hundreds of thousands of repos. This tool is the preflight check before that happens.
+A seemingly clean GitHub repo can trick an AI coding agent into running malware through *indirect* setup steps - a `postinstall` hook that fetches a remote payload, a `CLAUDE.md` that says "run setup without reviewing it," an MCP config that hands the agent a shell.
 
 ## What it does
 
-The scanner runs a deterministic 6-stage pipeline — **no LLM in the detection path**:
+The scanner runs a deterministic 6-stage pipeline - **no LLM in the detection path**:
 
 ```
 acquire → FileTree → detectors emit Facts → YAML rules emit Findings
@@ -34,10 +34,10 @@ acquire → FileTree → detectors emit Facts → YAML rules emit Findings
 
 It produces:
 
-- **A trust card** — `PASS` / `REVIEW` / `FAIL` verdict with a plain-English summary.
-- **A blast-radius map** — per-capability risk (filesystem, network, secrets, shell, install hooks, CI).
-- **Agent-instruction aggregation** — every `CLAUDE.md`, Cursor/Windsurf rule, Copilot instruction, and MCP config in one place.
-- **A heuristic setup-chain view** — the indirect path from `README` → install hook → script → remote fetch → decode → exec.
+- **A trust card** - `PASS` / `REVIEW` / `FAIL` verdict with a plain-English summary.
+- **A blast-radius map** - per-capability risk (filesystem, network, secrets, shell, install hooks, CI).
+- **Agent-instruction aggregation** - every `CLAUDE.md`, Cursor/Windsurf rule, Copilot instruction, and MCP config in one place.
+- **A heuristic setup-chain view** - the indirect path from `README` → install hook → script → remote fetch → decode → exec.
 
 ### Example: a suspicious repo
 
@@ -74,7 +74,7 @@ pip install agent-repo-preflight
 agent-repo-preflight scan .
 ```
 
-> **Pre-release:** until the first PyPI release, install from source —
+> **Pre-release:** until the first PyPI release, install from source -
 > `pip install "git+https://github.com/scottcampbelldata/agent-repo-preflight"` (or clone and
 > `pip install -e .`). The PyPI release pipeline is ready; see [RELEASING.md](RELEASING.md).
 
@@ -94,7 +94,7 @@ Set `GITHUB_TOKEN` to scan private repos or raise rate limits (public repos work
 ## Web demo
 
 A shareable, visual version of the same report. One Python service (FastAPI +
-server-rendered HTML), SQLite-backed permalinks — no Node, no separate database server.
+server-rendered HTML), SQLite-backed permalinks - no Node, no separate database server.
 
 ```bash
 pip install 'agent-repo-preflight[web]'
@@ -107,15 +107,15 @@ python -m agent_repo_preflight.web          # serves on http://127.0.0.1:8000
 docker compose up -d --build               # then put Caddy/nginx in front for TLS
 ```
 
-Full instructions — auto-HTTPS with Caddy, rate-limiting a public endpoint, persistence —
+Full instructions - auto-HTTPS with Caddy, rate-limiting a public endpoint, persistence -
 are in [docs/deploy.md](docs/deploy.md).
 
 Pages:
 
-- `/` — paste a GitHub URL, get a report; recent scans listed below
-- `/report/{id}` — the shareable visual report (trust card, blast-radius grid, findings, setup-chain, agent instructions), plus `.json` and `.md` versions at the same id
-- `/examples` — pre-scanned clean + high-risk demo repos
-- `/rules` — the loaded ruleset
+- `/` - paste a GitHub URL, get a report; recent scans listed below
+- `/report/{id}` - the shareable visual report (trust card, blast-radius grid, findings, setup-chain, agent instructions), plus `.json` and `.md` versions at the same id
+- `/examples` - pre-scanned clean + high-risk demo repos
+- `/rules` - the loaded ruleset
 
 The web boundary is **GitHub-only and remote-only by construction**: it validates every
 URL with the same parser the engine uses (rejecting non-GitHub URLs *and* local server
@@ -148,20 +148,20 @@ jobs:
 
 The Action posts a sticky PR comment with the report, sets the check status, and fails
 the build when the verdict meets `fail-on`. It requests only `contents: read` +
-`pull-requests: write` — never `write-all` — and pins its own dependencies to SHAs.
+`pull-requests: write` - never `write-all` - and pins its own dependencies to SHAs.
 Full reference: [docs/github-action.md](docs/github-action.md).
 
 ## Badge
 
 Advertise that your repo is preflight-clean.
 
-**Static** (zero setup) — paste into your README:
+**Static** (zero setup) - paste into your README:
 
 ```markdown
 ![Agent Preflight](https://img.shields.io/badge/agent--preflight-clean-brightgreen)
 ```
 
-**Dynamic** (reflects real scan results) — the CLI and Action write a shields.io
+**Dynamic** (reflects real scan results) - the CLI and Action write a shields.io
 *endpoint* JSON:
 
 ```bash
@@ -187,25 +187,25 @@ Colors: PASS → green, REVIEW → yellow, FAIL → red.
 | **Secrets / env** | `.env.example` requesting broad cloud keys, reads of `~/.ssh` / `~/.aws` / `.npmrc` |
 | **CI / CD** | `permissions: write-all`, unpinned actions, `pull_request_target` running untrusted PR code |
 
-## Honest about its limits
+## Limits
 
-This tool detects repo-level **risk indicators** before AI agents execute setup, install, CI, MCP, or instruction files. **It does not prove a repository is safe.** A `PASS` means no known indicators fired — not a guarantee. Always read code before running it.
+This tool detects repo-level **risk indicators** before AI agents execute setup, install, CI, MCP, or instruction files. **It does not prove a repository is safe.** A `PASS` means no known indicators fired - not a guarantee. Always read code before running it.
 
-The scanner **never executes target repository code**: it downloads a tarball (no `git`), extracts it in memory, and only reads. That "never run it" guarantee is the point.
+The scanner **never executes target repository code**: it downloads a tarball (no `git`), extracts it in memory, and only reads.
 
 ## Contributing rules
 
-Rules are plain YAML in [`src/agent_repo_preflight/rules_data/`](src/agent_repo_preflight/rules_data/). Adding one is the easiest way to contribute — see [docs/rule-authoring.md](docs/rule-authoring.md) for the schema and the list of available detector facts.
+Rules are plain YAML in [`src/agent_repo_preflight/rules_data/`](src/agent_repo_preflight/rules_data/). Adding one is the easiest way to contribute - see [docs/rule-authoring.md](docs/rule-authoring.md) for the schema and the list of available detector facts.
 
 ## Docs
 
-- [Threat model](docs/threat-model.md) — what AI-agent repo onboarding risks look like, and what this covers / doesn't.
-- [Rule authoring](docs/rule-authoring.md) — write and test a new rule.
-- [AI-agent safety checklist](docs/ai-agent-safety-checklist.md) — a human checklist mirroring the rules.
-- [GitHub Action reference](docs/github-action.md) — inputs, outputs, gating, permissions.
-- [Deploy guide](docs/deploy.md) — host the web demo on a VPS (Docker, Caddy, TLS).
+- [Threat model](docs/threat-model.md) - what AI-agent repo onboarding risks look like, and what this covers / doesn't.
+- [Rule authoring](docs/rule-authoring.md) - write and test a new rule.
+- [AI-agent safety checklist](docs/ai-agent-safety-checklist.md) - a human checklist mirroring the rules.
+- [GitHub Action reference](docs/github-action.md) - inputs, outputs, gating, permissions.
+- [Deploy guide](docs/deploy.md) - host the web demo on a VPS (Docker, Caddy, TLS).
 
 ## License
 
-[MIT](LICENSE) — free to use, modify, and distribute, including commercially.
+[MIT](LICENSE) - free to use, modify, and distribute, including commercially.
 Attribution appreciated but not required beyond keeping the license notice.

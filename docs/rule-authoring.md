@@ -30,11 +30,11 @@ Required fields: `id`, `name`, `severity`, `category`, `explanation`, `remediati
 
 ## Two ways a rule matches
 
-**1. Fact rule** — `match.facts` is set. The rule matches any detector Fact whose `type`
+**1. Fact rule** - `match.facts` is set. The rule matches any detector Fact whose `type`
 is in the list. If `match.patterns` is also given, at least one pattern must match the
 fact's evidence or one of its `data` values. The Finding's file/line come from the Fact.
 
-**2. Content rule** — `match.facts` is absent but `match.patterns` is set. The rule scans
+**2. Content rule** - `match.facts` is absent but `match.patterns` is set. The rule scans
 every text file line-by-line (optionally filtered by `match.file_patterns`) and emits one
 Finding per matching line.
 
@@ -45,18 +45,18 @@ Identical `(rule_id, file, line)` Findings are de-duplicated.
 | Fact type | Emitted when | `data` keys |
 |---|---|---|
 | `pkg.lifecycle_script` | npm `pre/postinstall`, `prepare`, etc. | `hook`, `command` |
-| `py.setup_network` | `setup.py` line does network/process/exec | — |
+| `py.setup_network` | `setup.py` line does network/process/exec | - |
 | `py.pyproject_build_hook` | non-standard PEP 517 build backend | `backend` |
 | `content.<id>` | regex pattern hit in any text file | `pattern_id` |
 | `shell.script_present` | repo ships `install.sh`/`*.ps1`/`*.bat`/`Makefile` | `kind` |
 | `agent.instruction_file` | `CLAUDE.md`/Cursor/Windsurf/Copilot/MCP file present | `surface` |
-| `agent.instruction_run_unverified` | "run … without … review" text | — |
+| `agent.instruction_run_unverified` | "run … without … review" text | - |
 | `agent.mcp_tool_grant` | MCP config references a powerful tool | `tool` |
 | `secret.broad_env_request` | `.env.example` requests a broad secret | `key` |
-| `ci.write_all_permissions` | workflow `permissions: write-all` | — |
+| `ci.write_all_permissions` | workflow `permissions: write-all` | - |
 | `ci.unpinned_action` | `uses:` not pinned to a 40-char SHA | `action` |
-| `ci.pull_request_target` | workflow triggers on `pull_request_target` | — |
-| `ci.untrusted_checkout_exec` | PR-target workflow checks out + runs PR code | — |
+| `ci.pull_request_target` | workflow triggers on `pull_request_target` | - |
+| `ci.untrusted_checkout_exec` | PR-target workflow checks out + runs PR code | - |
 
 The `content.<id>` ids are: `curl_pipe_sh`, `wget_pipe_sh`, `invoke_webrequest`,
 `start_process`, `netcat`, `socat`, `chmod_x`, `encoded_powershell`, `base64_exec`,
@@ -76,11 +76,11 @@ The `content.<id>` ids are: `curl_pipe_sh`, `wget_pipe_sh`, `invoke_webrequest`,
 
 ## Severity guidance
 
-- **critical** — execution of attacker-controlled code at install/CI time, reverse shells.
-- **high** — credential access, obfuscated execution, network payload retrieval.
-- **medium** — capability grants, install hooks present, broad secret requests.
-- **low** — hygiene issues (unpinned actions, `chmod +x`).
-- **info** — surfaces worth a human glance (an instruction file exists).
+- **critical** - execution of attacker-controlled code at install/CI time, reverse shells.
+- **high** - credential access, obfuscated execution, network payload retrieval.
+- **medium** - capability grants, install hooks present, broad secret requests.
+- **low** - hygiene issues (unpinned actions, `chmod +x`).
+- **info** - surfaces worth a human glance (an instruction file exists).
 
 A `critical` finding, or any install-hook finding tagged `network`, forces an overall
 `FAIL`. Any `high`/`medium` forces at least `REVIEW`.

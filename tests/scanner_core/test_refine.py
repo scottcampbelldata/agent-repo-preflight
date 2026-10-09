@@ -18,7 +18,7 @@ def test_non_doc_file_is_unchanged():
 
 
 def test_agent_instruction_in_markdown_is_not_downgraded():
-    # CLAUDE.md is markdown, but agents genuinely act on it — keep its severity.
+    # CLAUDE.md is markdown, but agents act on it - keep its severity.
     out = downgrade_documentation_findings([_f("CLAUDE.md", "high", category="agent-instructions")])
     assert out[0].severity == "high"
 
@@ -49,7 +49,7 @@ def test_real_source_file_not_downgraded():
 
 
 def test_requirements_txt_is_not_documentation():
-    # A dependency manifest ends in .txt but is config, not docs — keep full severity.
+    # A dependency manifest ends in .txt but is config, not docs - keep full severity.
     out = downgrade_documentation_findings(
         [_f("requirements.txt", "medium", category="dependencies")]
     )

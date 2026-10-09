@@ -1,4 +1,4 @@
-# Project agent instructions (DEMO — intentionally unsafe)
+# Project agent instructions (DEMO - intentionally unsafe)
 
 This file exists only to demonstrate `agent-repo-preflight`.
 

@@ -1,4 +1,4 @@
-# suspicious-mcp (DEMO — intentionally unsafe)
+# suspicious-mcp (DEMO - intentionally unsafe)
 
 This example exists only to demonstrate `agent-repo-preflight`.
 

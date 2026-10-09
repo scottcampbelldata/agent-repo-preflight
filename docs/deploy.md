@@ -1,6 +1,6 @@
 # Deploying the web demo on a VPS
 
-The web demo is a single FastAPI service with a SQLite store — no external database,
+The web demo is a single FastAPI service with a SQLite store - no external database,
 no Node. The recommended deployment is Docker Compose behind a reverse proxy that
 terminates TLS.
 
@@ -23,7 +23,7 @@ curl -s localhost:8000/ | head -n1
 docker compose logs -f web
 ```
 
-## 2. TLS + public access (Caddy — automatic HTTPS)
+## 2. TLS + public access (Caddy - automatic HTTPS)
 
 Caddy gets you HTTPS with one config block and auto-renewing certificates. On the VPS,
 point your domain's DNS A record at the server, then add a `caddy` service.
@@ -46,7 +46,7 @@ docker run -d --name caddy --restart unless-stopped --network host \
   caddy:2
 ```
 
-That's it — `https://preflight.example.com` is live with a valid certificate.
+That's it - `https://preflight.example.com` is live with a valid certificate.
 
 <details>
 <summary>nginx alternative</summary>
@@ -88,11 +88,11 @@ echo "GITHUB_TOKEN=ghp_xxx" > .env   # docker compose reads .env automatically
 docker compose up -d
 ```
 
-## 4. Running a *public* scan endpoint — read this
+## 4. Running a *public* scan endpoint - read this
 
 The service accepts a GitHub URL and downloads that repo's tarball to scan it. It is
-safe by design — **it never executes target repository code**, only `github.com` URLs
-are accepted (no local paths / SSRF), and the tarball is capped at 50 MB — but a public
+safe by design - **it never executes target repository code**, only `github.com` URLs
+are accepted (no local paths / SSRF), and the tarball is capped at 50 MB - but a public
 endpoint still does outbound work on behalf of anonymous users. Before exposing it:
 
 - **Set `GITHUB_TOKEN`** so GitHub doesn't rate-limit your server's IP.

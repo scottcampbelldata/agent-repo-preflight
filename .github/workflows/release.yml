@@ -40,7 +40,7 @@ jobs:
       name: pypi
       url: https://pypi.org/p/agent-repo-preflight
     permissions:
-      id-token: write # OIDC token for PyPI Trusted Publishing — no API token stored
+      id-token: write # OIDC token for PyPI Trusted Publishing - no API token stored
     steps:
       - name: Download dist artifact
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8

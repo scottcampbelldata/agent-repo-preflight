@@ -1,7 +1,7 @@
 # AI-agent repo safety checklist
 
 A human checklist for vetting an unfamiliar repository before letting an AI coding agent
-clone, install, or run it. Mirrors what `agent-repo-preflight` checks automatically — use
+clone, install, or run it. Mirrors what `agent-repo-preflight` checks automatically - use
 it to confirm and to catch what static rules can't.
 
 ## Before the agent touches the repo
@@ -13,10 +13,10 @@ it to confirm and to catch what static rules can't.
 
 ## Install hooks
 
-- [ ] `package.json` — any `preinstall` / `postinstall` / `prepare` scripts? Read them.
-- [ ] `setup.py` — any network calls, `os.system`, `subprocess`, or `exec`/`eval`?
-- [ ] `pyproject.toml` — is the `build-backend` a recognized project?
-- [ ] Shipped `install.sh` / `*.ps1` / `*.bat` / `Makefile` — read every target.
+- [ ] `package.json` - any `preinstall` / `postinstall` / `prepare` scripts? Read them.
+- [ ] `setup.py` - any network calls, `os.system`, `subprocess`, or `exec`/`eval`?
+- [ ] `pyproject.toml` - is the `build-backend` a recognized project?
+- [ ] Shipped `install.sh` / `*.ps1` / `*.bat` / `Makefile` - read every target.
 
 ## Dangerous command patterns
 
@@ -30,7 +30,7 @@ it to confirm and to catch what static rules can't.
 
 - [ ] Read every `CLAUDE.md`, `.cursor/rules`, `.windsurfrules`, and
       `.github/copilot-instructions.md`.
-- [ ] Reject any "run X without reviewing it" directive — that is a prompt-injection.
+- [ ] Reject any "run X without reviewing it" directive - that is a prompt-injection.
 - [ ] Review MCP configs: does any server grant `shell` / `filesystem` / `exec`?
 
 ## Secrets & environment
